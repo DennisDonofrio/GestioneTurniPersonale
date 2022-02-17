@@ -2,17 +2,6 @@ DROP DATABASE IF EXISTS gestione_personale;
 CREATE DATABASE gestione_personale;
 USE gestione_personale;
 
-DROP TABLE IF EXISTS dipendente;
-CREATE TABLE dipendente(
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(50),
-    cognome VARCHAR(50),
-    email VARCHAR(50),
-    hash_password VARCHAR(80),
-    indirizzo VARCHAR(50),
-    archiviato TINYINT(1)
-);
-
 DROP TABLE IF EXISTS datore;
 CREATE TABLE datore(
 	id INT PRIMARY KEY AUTO_INCREMENT,
@@ -22,6 +11,20 @@ CREATE TABLE datore(
     hash_password VARCHAR(80),
     indirizzo VARCHAR(50),
     archiviato TINYINT(1)
+);
+
+DROP TABLE IF EXISTS dipendente;
+CREATE TABLE dipendente(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(50),
+    cognome VARCHAR(50),
+    email VARCHAR(50),
+    hash_password VARCHAR(80),
+    indirizzo VARCHAR(50),
+    datore_id INT,
+    archiviato TINYINT(1),
+    FOREIGN KEY (datore_id) REFERENCES datore(id)
+    ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS tipo;
@@ -108,4 +111,14 @@ CREATE TABLE turno_lavoro(
     REFERENCES orario_turno(inizio, fine)
     ON UPDATE CASCADE ON DELETE CASCADE,
     PRIMARY KEY (dipendente_id, negozio_id, orario_turno_inizio, orario_turno_fine, data)
+);
+
+DROP TABLE IF EXISTS amministratore;
+CREATE TABLE amministratore(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(50),
+    cognome VARCHAR(50),
+    email VARCHAR(50),
+    hash_password VARCHAR(80),
+    indirizzo VARCHAR(50)
 );
