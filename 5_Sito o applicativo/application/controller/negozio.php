@@ -22,12 +22,13 @@ class Negozio extends Controller{
             $this->view->render('gestioneNegozi/aggiungiNegozio.php', false, array('tipi' => $tipi));
         }else if(isset($_POST['rimuoviNegozio'])){
             $negozi = $model->mostraNegozi();
-            $this->view->render('gestioneNegozi/rimuoviNegozio.php',  false, array('negozi' => $negozi));
+            $this->view->render('gestioneNegozi/rimuoviNegozio.php', false, array('negozi' => $negozi));
         }else if(isset($_POST['modificaNegozio'])){
-            $this->view->render('gestioneNegozi/modificaNegozio.php');
+            $negozi = $model->ottieniNegozi();
+            $tipi = $model->ottieniTipi();
+            $this->view->render('gestioneNegozi/modificaNegozio.php', false, array('negozi' => $negozi, 'tipi' => $tipi));
         }else if(isset($_POST['mostraNegozi'])){
-            $negozi = $model->mostraNegozi();
-            $this->view->render('gestioneNegozi/mostraNegozi.php',  false, array('negozi' => $negozi));
+            $this->mostraNegozi();
         }
     }
 
@@ -37,16 +38,19 @@ class Negozio extends Controller{
         $nome = $_POST['nome'];
         $indirizzo = $_POST['indirizzo'];
         $tipo = $_POST['tipo'];
-        $model->aggiungiNegozio($nome, $indirizzo, $tipo);
-        $this->locate('negozio');
+        if($model->aggiungiNegozio($nome, $indirizzo, $tipo)){
+            $this->locate('negozio');
+        }else{
+            $tipi = $model->ottieniTipi();
+            $this->view->render('gestioneNegozi/aggiungiNegozio.php',  false, array('error' => "Non è stato possibile inserire il negozio", 'tipi' => $tipi));
+        }
     }
 
     public function mostraNegozi(){
         parent::getModel("negozio_model.php");
         $model = new NegozioModel();
-        if($result = $model->mostraNegozi()){
-            $this->view->render("gestioneNegozi/mostraNegozi", false, array('negozi' => $result));
-        }
+        $result = $model->mostraNegozi();
+        $this->view->render("gestioneNegozi/mostraNegozi.php", false, array('negozi' => $result));
     }
 
     public function eliminaNegozio(){
@@ -56,6 +60,22 @@ class Negozio extends Controller{
         echo $id;
         $model->rimuoviNegozio($id);
         $this->locate('negozio');
+    }
+    
+    public function modificaNegozio(){
+        parent::getModel("negozio_model.php");
+        $model = new NegozioModel();
+        $nome = $_POST['nome'];
+        $indirizzo = $_POST['indirizzo'];
+        $tipo = $_POST['tipo'];
+        $idNegozio = $_POST['negozio'];
+        if($model->modificaNegozio($idNegozio, $nome, $indirizzo, $tipo)){
+            $this->locate('negozio');
+        }else{
+            $tipi = $model->ottieniTipi();
+            $negozi = $model->ottieniNegozi();
+            $this->view->render('gestioneNegozi/modificaNegozio.php', false, array('negozi' => $negozi, 'tipi' => $tipi, 'error' => "Non è stato possibile modificare il negozio"));
+        }
     }
 
 }

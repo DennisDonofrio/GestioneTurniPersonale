@@ -3,7 +3,7 @@
 		<table>
 			<thead>
 				<tr>
-					<h1>Login</h1>
+					<h1 style="text-align: center;">Login</h1>
 				</tr>
 			</thead>
 			<tbody>
@@ -32,6 +32,6 @@
 		</table>
 	</form>
 </div>
-<?php if(isset($this->errorMessage) &&  $this->errorMessage != ""){ ?>
-	<h2 id="errorLogin" style="text-align: center" class="alert alert-danger"> <?php echo $this->errorMessage ?></h2>
+<?php if(isset($data['error'])){ ?>
+	<h2 id="errorLogin" style="text-align: center" class="alert alert-danger"> <?php echo $data['error'] ?></h2>
 <?php } ?>

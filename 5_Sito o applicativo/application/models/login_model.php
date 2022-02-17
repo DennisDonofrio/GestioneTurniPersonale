@@ -30,15 +30,17 @@
 			for($i=1;$i<=3;$i++){
 				$currentQuery = 'sql' . $i;
 				$result = $conn->query($$currentQuery);
-				$row = $result->fetch_assoc();
-				if ($result->num_rows > 0) {
-					$_SESSION['id'] = $row['id'];
-					$_SESSION['role'] = $i;
-					return true;
+				if($result){
+					if ($result->num_rows > 0) {
+						$row = $result->fetch_assoc();
+						$_SESSION['id'] = $row['id'];
+						$_SESSION['role'] = $i;
+						return true;
+					}
 				}
 			}
 			session_destroy();
-			throw new Exception("Email o password non valida");      
+			return false;
 		}
 	}
 ?>
