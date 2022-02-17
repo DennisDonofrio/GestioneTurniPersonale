@@ -1,0 +1,8 @@
+insert into dipendente values (1, "Dennis", "Donofrio", "d.d@gmail.com", "03b7916c647cb13a0622fb9c3b9b4a6efaeaa72b03e8463fe2e1e4b0c7a33dbe", "", 0);
+insert into datore values (2, "Andrea", "Curti", "a.c@gmail.com", "bc7353cb7ab19d65ac5474e2d47433935c4b67b4e66a9525d72676ba537dfa25", "", 0);
+insert into dipendente values (3, "Gioele", "Zanetti", "g.z@gmail.com", "b70b6d646df6917df9016a3d37a4c1c28001550f943b29a7c6ce1118a4da2fba", "", 0);
+
+insert into tipo values(1, 'Alimentari', 'Cibo e bevande');
+insert into tipo values(2, 'Vestiario', 'Qualsiasi tipo di vestito');
+
+insert into negozio values(1, 'Panetteria Donofrio', 'Via bramboi', 0, 1, 2);
