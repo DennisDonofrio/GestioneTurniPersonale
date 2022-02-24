@@ -14,13 +14,15 @@ class Home extends Controller
 
     public function load(){
         if(isset($_POST['calendario'])){
-            //$this->view->render('gestioneNegozi/aggiungiNegozio.php');
+            parent::getModel('negozio_model.php');
+            $model = new NegozioModel();
+            $this->view->render('calendario/negozio.php', false, array('negozi' => $model->ottieniNegozi()));
         }else if(isset($_POST['gestisciDipendenti'])){
             $this->locate('dipendente');
         }else if(isset($_POST['gestisciNegozi'])){
             $this->locate('negozio');
         }else if(isset($_POST['gestisciOrari'])){
-            //$this->view->render('gestioneNegozi/mostraNegozi.php');
+            $this->view->render('gestioneOrari/index.php');
         }else if(isset($_POST['gestioneDatori'])){
             $this->locate('gestioneDatori');
         }

@@ -66,3 +66,32 @@ body{
   border: 1px solid black;
   border-collapse: collapse;
 }
+
+#external-events {
+  position: fixed;
+  z-index: 2;
+  top: 160px;
+  left: 20px;
+  width: 150px;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  background: #eee;
+  height: calc(100vh) - 400px;
+}
+
+#external-events .fc-event {
+  cursor: move;
+  margin: 3px 0;
+}
+
+#calendar-container {
+  position: relative;
+  z-index: 1;
+  margin-left: 200px;
+  margin-right: 20px;
+}
+
+#calendar {
+  max-width: 1500x;
+  margin: 20px auto;
+}
