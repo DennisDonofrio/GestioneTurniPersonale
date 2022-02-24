@@ -74,6 +74,7 @@ CREATE TABLE usa(
     negozio_id INT,
     giorno_id INT,
     orario_id INT,
+    in_uso TINYINT(1),
     FOREIGN KEY (negozio_id) REFERENCES negozio(id)
     ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (giorno_id) REFERENCES giorno(id)
@@ -120,5 +121,6 @@ CREATE TABLE amministratore(
     cognome VARCHAR(50),
     email VARCHAR(50),
     hash_password VARCHAR(80),
-    indirizzo VARCHAR(50)
+    indirizzo VARCHAR(50),
+    in_uso TINYINT(1)
 );

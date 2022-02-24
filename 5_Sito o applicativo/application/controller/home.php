@@ -22,7 +22,7 @@ class Home extends Controller
         }else if(isset($_POST['gestisciNegozi'])){
             $this->locate('negozio');
         }else if(isset($_POST['gestisciOrari'])){
-            $this->view->render('gestioneOrari/index.php');
+            $this->locate('gestioneOrari');
         }else if(isset($_POST['gestioneDatori'])){
             $this->locate('gestioneDatori');
         }
