@@ -14,7 +14,9 @@ class Home extends Controller
 
     public function load(){
         if(isset($_POST['calendario'])){
-            //$this->view->render('gestioneNegozi/aggiungiNegozio.php');
+            parent::getModel('negozio_model.php');
+            $model = new NegozioModel();
+            $this->view->render('calendario/negozio.php', false, array('negozi' => $model->ottieniNegozi()));
         }else if(isset($_POST['gestisciDipendenti'])){
             $this->locate('dipendente');
         }else if(isset($_POST['gestisciNegozi'])){
