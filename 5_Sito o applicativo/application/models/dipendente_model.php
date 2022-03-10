@@ -39,10 +39,6 @@ class DipendenteModel{
 			$hash_password = $hp->getHashed();
             echo $email . " " . $pass . " " . $hash_password;
             $query = "INSERT INTO dipendente(nome, cognome, indirizzo, email, hash_password, archiviato, datore_id) VALUES ('$nome', '$cognome', '$indirizzo', '$email', '$hash_password', 0, " . $_SESSION['id'] . ")";
-            /*$result = $conn->query($query);
-            if ($result) {
-                return TRUE;
-            }*/
         }
         return FALSE;
     }

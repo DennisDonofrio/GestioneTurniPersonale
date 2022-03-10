@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-center pt-4 pb-4">
 	<form action="<?php echo URL ?>dipendente/rimuoviDipendente" method="POST">
 		<table>
-			<thead>
+			<tbody>
                 <tr>
 					<td>
 						<label>Dipendente:</label>

@@ -36,7 +36,7 @@
 
         public function ottieniTuttiDatoriEmail(){
             require 'application/libs/connection.php';
-            $sql = "SELECT id, email FROM datore;";
+            $sql = "SELECT id, email FROM datore WHERE archiviato=0;";
             $result = $conn->query($sql);
             $out = array();
             while($out[] = $result->fetch_assoc()){}
@@ -45,7 +45,7 @@
 
         public function ottieniDatiDatore($id){
             require 'application/libs/connection.php';
-            $sql = "SELECT * FROM datore WHERE id = $id;";
+            $sql = "SELECT * FROM datore WHERE id = $id AND archiviato=0;";
             $result = $conn->query($sql);
             $out = array();
             while($out[] = $result->fetch_assoc()){}
@@ -62,32 +62,39 @@
                 $this->pass2 = $this->test_input($_POST['pass2']);
                 $this->indirizzo = $this->test_input($_POST['indirizzo']);
             }else{
-                throw new Exception("Email o password non inseriti");
+                throw new Exception("Completare tutti i campi");
             }
         }
 
         public function modificaDatore(){
             require 'application/libs/Connection.php';
-			require 'application/libs/Hash.php';
             $this->estraiDatiPost();
-            if($this->sonoPasswordUguali() == 0){
-				$strongRegex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/";
-				if(preg_match($strongRegex, $this->pass1)){
-
-					$hp = new Hash($this->pass1);
-					$hp->doHash($this->email);
-					$this->hash_password = $hp->getHashed();
-
-                    $sql = "UPDATE datore set nome='".$this->nome."', cognome='"
-                    .$this->cognome."', email='".$this->email."', hash_password='".$this->hash_password."',
-                    indirizzo='".$this->indirizzo."' WHERE id='".$this->id."';";
-                    $result = $conn->query($sql);
-				}else{
-					throw new Exception("Complessità password non valida");
-				}
-			}else{
-				throw new Exception("Le due password non corrispondono");
-			}
+        
+            require 'application/libs/Hash.php';
+            require 'application/libs/email.php';
+            require 'application/libs/password.php';
+            $emailUser = new Email($_POST['email']);
+            if($emailUser->isValid()){
+                if($_POST['pass1'] == $_POST['pass2']){
+                    $passUser = new Password($_POST['pass1']);
+                    if($passUser->isValid()){
+                        $hp = new Hash($this->pass1);
+                        $hp->doHash($this->email);
+                        $this->hash_password = $hp->getHashed();
+                        echo "ciao";
+                        $sql = "UPDATE datore set nome='".$this->nome."', cognome='"
+                        .$this->cognome."', email='".$this->email."', hash_password='".$this->hash_password."',
+                        indirizzo='".$this->indirizzo."' WHERE id='".$this->id."';";
+                        $result = $conn->query($sql);
+                    }else{
+                        throw new Exception("La password deve contenere almeno:<br>- 8 Caratteri<br>-1 Maiuscola<br>-1 Minuscola<br>-1 Cifra<br>-1 Carattere speciale");
+                    }
+                }else{
+                    throw new Exception("Le due password non corrispondono");
+                }
+            }else{
+                throw new Exception("Email non valida");
+            }
         }
 
         public function sonoPasswordUguali(){
@@ -99,6 +106,7 @@
                 if($this->ottieniDatiDatore($_POST['id'])[0]['email'] == $_POST['email']){
                     require 'application/libs/connection.php';
                     $sql = "DELETE FROM datore WHERE id = " . $_POST['id'] . " ;";
+                    $sql = "UPDATE datore set archiviato=1 WHERE id = " . $_POST['id'] . " ;";
                     $result = $conn->query($sql);
                 }else{
                     throw new Exception("Le due email non corrispondono");
@@ -110,26 +118,36 @@
 
         public function aggiungiDatore(){
             if(!empty($_POST['nome']) && !empty($_POST['cognome']) && !empty($_POST['email']) && !empty($_POST['pass1']) && !empty($_POST['pass2']) && !empty($_POST['indirizzo'])){
-                if($this->sonoPasswordUguali() == 0){
-                    require 'application/libs/Hash.php';
+                require 'application/libs/Hash.php';
+                require 'application/libs/email.php';
+                require 'application/libs/password.php';
 
-                    $this->nome = $this->test_input($_POST['nome']);
-                    $this->cognome = $this->test_input($_POST['cognome']);
-                    $this->email = $this->test_input($_POST['email']);
-                    $this->pass1 = $this->test_input($_POST['pass1']);
-                    $this->pass2 = $this->test_input($_POST['pass2']);
-                    $this->indirizzo = $this->test_input($_POST['indirizzo']);
+                $emailUser = new Email($_POST['email']);
+                if($emailUser->isValid()){
+                    if($_POST['pass1'] == $_POST['pass2']){
+                        $passUser = new Password($_POST['pass1']);
+                        if($passUser->isValid()){
+                            $this->nome = $this->test_input($_POST['nome']);
+                            $this->cognome = $this->test_input($_POST['cognome']);
+                            $this->email = $this->test_input($_POST['email']);
+                            $this->pass1 = $this->test_input($_POST['pass1']);
+                            $this->pass2 = $this->test_input($_POST['pass2']);
+                            $this->indirizzo = $this->test_input($_POST['indirizzo']);
 
-                    $hp = new Hash($this->pass1);
-					$hp->doHash($this->email);
-					$this->hash_password = $hp->getHashed();
-
-                    require 'application/libs/connection.php';
-                    $sql = "INSERT INTO datore(nome, cognome, email, hash_password, indirizzo) values('".$this->nome."', '".$this->cognome."', '".$this->email."', '".$this->hash_password."', '".$this->indirizzo."');";
-                    echo $sql;
-                    $result = $conn->query($sql);
+                            $hp = new Hash($this->pass1);
+                            $hp->doHash($this->email);
+                            $this->hash_password = $hp->getHashed();
+                            require 'application/libs/connection.php';
+                            $sql = "INSERT INTO datore(nome, cognome, email, hash_password, indirizzo, archiviato) values('".$this->nome."', '".$this->cognome."', '".$this->email."', '".$this->hash_password."', '".$this->indirizzo."', 0);";
+                            $result = $conn->query($sql);
+                        }else{
+                            throw new Exception("La password deve contenere almeno:<br>- 8 Caratteri<br>-1 Maiuscola<br>-1 Minuscola<br>-1 Cifra<br>-1 Carattere speciale");
+                        }
+                    }else{
+                        throw new Exception("Le due password non corrispondono");
+                    }
                 }else{
-                    throw new Exception("Le due password non corrispondono");
+                    throw new Exception("Email non valida");
                 }
             }else{
                 throw new Exception("Completare tutti i campi");

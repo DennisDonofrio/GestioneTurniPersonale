@@ -77,4 +77,17 @@
             return $data;
         }
     }
+
+    public function rimuoviEventiInRange($start, $end){
+        require 'application/libs/connection.php';
+        $query = "";
+        $result = $conn->query($query);
+        if($result){
+            return true;
+        }
+        return false;
+    }
+
+}
+
 ?>

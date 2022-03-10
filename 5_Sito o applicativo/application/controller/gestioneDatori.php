@@ -32,13 +32,12 @@
                 $model = new DatoreModel();
                 try{
                     $model->modificaDatore();
-                   
                 }catch(Exception $e){
                     $this->view->error = $e->getMessage();
                 }
                 $this->view->data = $model->ottieniTuttiDatori();
                 $this->view->selected = $model->ottieniDatiDatore($_POST['id']);
-                $this->view->render("gestioneDatori/modifica.php");
+                $this->view->render("gestioneDatori/index.php");
             }else if(isset($_POST['datoreButton']) && isset($_POST['id'])){
                 require 'application/models/datoreModel.php';
                 $model = new DatoreModel();
@@ -58,7 +57,7 @@
                     $this->view->error = $e->getMessage();
                 }
                 $this->view->data = $model->ottieniTuttiDatoriEmail();
-                $this->view->render("gestioneDatori/rimuovi.php");
+                $this->view->render("gestioneDatori/index.php");
             }
         }
 
@@ -71,8 +70,9 @@
                     $this->view->locate("gestioneDatori/index");
                 }catch(Exception $e){
                     $this->view->error = $e->getMessage();
+                    $this->view->render("gestioneDatori/aggiungi.php");
                 }
-                $this->view->render("gestioneDatori/aggiungi.php");
+                
             }
         }
     }

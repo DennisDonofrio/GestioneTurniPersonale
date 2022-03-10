@@ -13,7 +13,7 @@ class View
             require "application/views/" . $name;
         }else{
             require 'application/views/header.php';
-            require 'application/views/' . $name;
+            require "application/views/" . $name;
             require 'application/views/footer.php';
         }
     }
