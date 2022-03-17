@@ -10,11 +10,11 @@
         private $hash_password;
         private $indirizzo;
 
-        public function __construct(){
+        function __construct(){
 
         }
 
-        public function ottieniTuttiDatori(){
+        function ottieniTuttiDatori(){
             require 'application/libs/connection.php';
             $sql = "SELECT id, nome, cognome FROM datore;";
             $result = $conn->query($sql);
@@ -25,7 +25,7 @@
             return $out;
         }
 
-        public function ottieniTuttiDatoriCompleti(){
+        function ottieniTuttiDatoriCompleti(){
             require 'application/libs/connection.php';
             $sql = "SELECT * FROM datore;";
             $result = $conn->query($sql);
@@ -34,7 +34,7 @@
             return $out;
         }
 
-        public function ottieniTuttiDatoriEmail(){
+        function ottieniTuttiDatoriEmail(){
             require 'application/libs/connection.php';
             $sql = "SELECT id, email FROM datore WHERE archiviato=0;";
             $result = $conn->query($sql);
@@ -43,7 +43,7 @@
             return $out;
         }
 
-        public function ottieniDatiDatore($id){
+        function ottieniDatiDatore($id){
             require 'application/libs/connection.php';
             $sql = "SELECT * FROM datore WHERE id = $id AND archiviato=0;";
             $result = $conn->query($sql);
@@ -52,7 +52,7 @@
             return $out;
         }
 
-        public function estraiDatiPost(){
+        function estraiDatiPost(){
             if(!empty($_POST['id']) && !empty($_POST['nome']) && !empty($_POST['cognome']) && !empty($_POST['email']) && !empty($_POST['pass1']) && !empty($_POST['pass2']) && !empty($_POST['indirizzo'])){
                 $this->id = $this->test_input($_POST['id']);
                 $this->nome = $this->test_input($_POST['nome']);
@@ -66,7 +66,7 @@
             }
         }
 
-        public function modificaDatore(){
+        function modificaDatore(){
             require 'application/libs/Connection.php';
             $this->estraiDatiPost();
         
@@ -97,11 +97,11 @@
             }
         }
 
-        public function sonoPasswordUguali(){
+        function sonoPasswordUguali(){
 			return strcmp($this->pass1, $this->pass2);
 		}
 
-        public function eliminaDatore(){
+        function eliminaDatore(){
             if(isset($_POST['id']) && isset($_POST['email'])){
                 if($this->ottieniDatiDatore($_POST['id'])[0]['email'] == $_POST['email']){
                     require 'application/libs/connection.php';
@@ -116,7 +116,7 @@
             }
         }
 
-        public function aggiungiDatore(){
+        function aggiungiDatore(){
             if(!empty($_POST['nome']) && !empty($_POST['cognome']) && !empty($_POST['email']) && !empty($_POST['pass1']) && !empty($_POST['pass2']) && !empty($_POST['indirizzo'])){
                 require 'application/libs/Hash.php';
                 require 'application/libs/email.php';
@@ -154,7 +154,7 @@
             }
         }
 
-        public function test_input($data) {
+        function test_input($data) {
             $data = trim($data);
             $data = stripslashes($data);
             $data = htmlspecialchars($data);
