@@ -21,7 +21,7 @@
                 $this->view->render("gestioneDatori/rimuovi.php");
             }else if(isset($_POST['mostra'])){
                 $this->view->data = $model->ottieniTuttiDatoriCompleti();
-                $this->view->template = array("id", "nome", "cognome", "email", "indirizzo", "archiviato");
+                $this->view->template = array("id", "nome", "cognome", "email", "indirizzo");
                 $this->view->render("gestioneDatori/mostra.php");
             }
         }

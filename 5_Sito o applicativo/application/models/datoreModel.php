@@ -27,7 +27,7 @@
 
         public function ottieniTuttiDatoriCompleti(){
             require 'application/libs/connection.php';
-            $sql = "SELECT * FROM datore;";
+            $sql = "SELECT * FROM datore WHERE archiviato=0;";
             $result = $conn->query($sql);
             $out = array();
             while($out[] = $result->fetch_assoc()){}
@@ -45,7 +45,8 @@
 
         public function ottieniDatiDatore($id){
             require 'application/libs/connection.php';
-            $sql = "SELECT * FROM datore WHERE id = $id AND archiviato=0;";
+            $idChecked = AntiCsScript::check($id);
+            $sql = "SELECT * FROM datore WHERE id = $idChecked AND archiviato=0;";
             $result = $conn->query($sql);
             $out = array();
             while($out[] = $result->fetch_assoc()){}
@@ -53,14 +54,16 @@
         }
 
         public function estraiDatiPost(){
-            if(!empty($_POST['id']) && !empty($_POST['nome']) && !empty($_POST['cognome']) && !empty($_POST['email']) && !empty($_POST['pass1']) && !empty($_POST['pass2']) && !empty($_POST['indirizzo'])){
-                $this->id = $this->test_input($_POST['id']);
-                $this->nome = $this->test_input($_POST['nome']);
-                $this->cognome = $this->test_input($_POST['cognome']);
-                $this->email = $this->test_input($_POST['email']);
-                $this->pass1 = $this->test_input($_POST['pass1']);
-                $this->pass2 = $this->test_input($_POST['pass2']);
-                $this->indirizzo = $this->test_input($_POST['indirizzo']);
+            if(!empty($_POST['id']) && !empty($_POST['nome']) && !empty($_POST['cognome']) 
+            && !empty($_POST['email']) && !empty($_POST['pass1']) 
+            && !empty($_POST['pass2']) && !empty($_POST['indirizzo'])){
+                $this->id = AntiCsScript::check($_POST['id']);
+                $this->nome = AntiCsScript::check($_POST['nome']);
+                $this->cognome = AntiCsScript::check($_POST['cognome']);
+                $this->email = AntiCsScript::check($_POST['email']);
+                $this->pass1 = AntiCsScript::check($_POST['pass1']);
+                $this->pass2 = AntiCsScript::check($_POST['pass2']);
+                $this->indirizzo = AntiCsScript::check($_POST['indirizzo']);
             }else{
                 throw new Exception("Completare tutti i campi");
             }
@@ -69,7 +72,6 @@
         public function modificaDatore(){
             require 'application/libs/Connection.php';
             $this->estraiDatiPost();
-        
             require 'application/libs/Hash.php';
             require 'application/libs/email.php';
             require 'application/libs/password.php';
@@ -81,11 +83,9 @@
                         $hp = new Hash($this->pass1);
                         $hp->doHash($this->email);
                         $this->hash_password = $hp->getHashed();
-                        echo "ciao";
-                        $sql = "UPDATE datore set nome='".$this->nome."', cognome='"
-                        .$this->cognome."', email='".$this->email."', hash_password='".$this->hash_password."',
-                        indirizzo='".$this->indirizzo."' WHERE id='".$this->id."';";
-                        $result = $conn->query($sql);
+                        $sql = $conn->prepare("UPDATE datore set nome=?, cognome=?, email=?, hash_password=?, indirizzo=? WHERE id=?");
+			            $sql->bind_param("sssssi", $this->nome, $this->cognome, $this->email, $this->hash_password, $this->indirizzo, $this->id);
+                        $result = $sql->execute();
                     }else{
                         throw new Exception("La password deve contenere almeno:<br>- 8 Caratteri<br>-1 Maiuscola<br>-1 Minuscola<br>-1 Cifra<br>-1 Carattere speciale");
                     }
@@ -105,9 +105,12 @@
             if(isset($_POST['id']) && isset($_POST['email'])){
                 if($this->ottieniDatiDatore($_POST['id'])[0]['email'] == $_POST['email']){
                     require 'application/libs/connection.php';
-                    $sql = "DELETE FROM datore WHERE id = " . $_POST['id'] . " ;";
-                    $sql = "UPDATE datore set archiviato=1 WHERE id = " . $_POST['id'] . " ;";
-                    $result = $conn->query($sql);
+                   
+                    //$sql = "UPDATE datore set archiviato=1 WHERE id = " . AntiCsScript::check($_POST['id']) . " ;";
+                    
+                    $sql = $conn->prepare("UPDATE datore set archiviato=1 WHERE id =?");
+			        $sql->bind_param("i", AntiCsScript::check($_POST['id']));
+                    $result = $sql->execute();
                 }else{
                     throw new Exception("Le due email non corrispondono");
                 }
@@ -117,7 +120,9 @@
         }
 
         public function aggiungiDatore(){
-            if(!empty($_POST['nome']) && !empty($_POST['cognome']) && !empty($_POST['email']) && !empty($_POST['pass1']) && !empty($_POST['pass2']) && !empty($_POST['indirizzo'])){
+            if(!empty($_POST['nome']) && !empty($_POST['cognome']) 
+            && !empty($_POST['email']) && !empty($_POST['pass1']) 
+            && !empty($_POST['pass2']) && !empty($_POST['indirizzo'])){
                 require 'application/libs/Hash.php';
                 require 'application/libs/email.php';
                 require 'application/libs/password.php';
@@ -125,21 +130,21 @@
                 $emailUser = new Email($_POST['email']);
                 if($emailUser->isValid()){
                     if($_POST['pass1'] == $_POST['pass2']){
-                        $passUser = new Password($_POST['pass1']);
+                        $passUser = new Password(AntiCsScript::check($_POST['pass1']));
                         if($passUser->isValid()){
-                            $this->nome = $this->test_input($_POST['nome']);
-                            $this->cognome = $this->test_input($_POST['cognome']);
-                            $this->email = $this->test_input($_POST['email']);
-                            $this->pass1 = $this->test_input($_POST['pass1']);
-                            $this->pass2 = $this->test_input($_POST['pass2']);
-                            $this->indirizzo = $this->test_input($_POST['indirizzo']);
-
+                            $this->nome = AntiCsScript::check($_POST['nome']);
+                            $this->cognome = AntiCsScript::check($_POST['cognome']);
+                            $this->email = AntiCsScript::check($_POST['email']);
+                            $this->pass1 = AntiCsScript::check($_POST['pass1']);
+                            $this->pass2 = AntiCsScript::check($_POST['pass2']);
+                            $this->indirizzo = AntiCsScript::check($_POST['indirizzo']);
                             $hp = new Hash($this->pass1);
                             $hp->doHash($this->email);
                             $this->hash_password = $hp->getHashed();
                             require 'application/libs/connection.php';
-                            $sql = "INSERT INTO datore(nome, cognome, email, hash_password, indirizzo, archiviato) values('".$this->nome."', '".$this->cognome."', '".$this->email."', '".$this->hash_password."', '".$this->indirizzo."', 0);";
-                            $result = $conn->query($sql);
+                            $sql = $conn->prepare("INSERT INTO datore(nome, cognome, email, hash_password, indirizzo, archiviato) values(?, ?, ?, ?, ?, 0)");
+                            $sql->bind_param("sssss", $this->nome, $this->cognome, $this->email, $this->hash_password, $this->indirizzo);
+                            $result = $sql->execute();
                         }else{
                             throw new Exception("La password deve contenere almeno:<br>- 8 Caratteri<br>-1 Maiuscola<br>-1 Minuscola<br>-1 Cifra<br>-1 Carattere speciale");
                         }
@@ -152,13 +157,6 @@
             }else{
                 throw new Exception("Completare tutti i campi");
             }
-        }
-
-        public function test_input($data) {
-            $data = trim($data);
-            $data = stripslashes($data);
-            $data = htmlspecialchars($data);
-            return $data;
         }
     }
 ?>

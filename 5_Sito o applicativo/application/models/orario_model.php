@@ -76,18 +76,15 @@
             while($data[] = $result->fetch_assoc()){}
             return $data;
         }
-    }
 
-    public function rimuoviEventiInRange($start, $end){
-        require 'application/libs/connection.php';
-        $query = "";
-        $result = $conn->query($query);
-        if($result){
-            return true;
+        public function rimuoviEventiInRange($start, $end){
+            require 'application/libs/connection.php';
+            $query = "";
+            $result = $conn->query($query);
+            if($result){
+                return true;
+            }
+            return false;
         }
-        return false;
     }
-
-}
-
 ?>
