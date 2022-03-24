@@ -39,22 +39,27 @@
                 }catch(Exception $e){
                     $this->view->error = $e->getMessage();
                 }
-                $this->view->render("gestioneOrari/aggiungi.php");
             }
+            $this->view->render("gestioneOrari/aggiungi.php");
         }
 
         public function modifica(){
+            require 'application/models/orario_model.php';
+            $model = new OrarioModel();
             if(isset($_POST['modifica'])){
-                require 'application/models/orario_model.php';
-                $model = new OrarioModel();
                 try{
                     $model->modificaOrario();
                 }catch(Exception $e){
                     $this->view->error = $e->getMessage();
                 }
-                $model = new OrarioModel();
-                $this->view->render("gestioneOrari/modifica.php", false, array('orario' => $model->ottieniOrariCompleti()));
             }
+            $this->view->render("gestioneOrari/modifica.php", false, array('orario' => $model->ottieniOrariCompleti()));
+        }
+
+        public function mostra(){
+            require 'application/models/orario_model.php';
+            $model = new OrarioModel();
+            $this->view->render("gestioneOrari/mostra.php", false, array('orario' => $model->ottieniOrariCompleti()));
         }
 /*
         public function rimuovi(){

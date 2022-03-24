@@ -23,7 +23,5 @@
             $data = htmlspecialchars($data);
             return AntiCsScript::checkAntiScript($data);
         }
-
-
 	}
 ?>
