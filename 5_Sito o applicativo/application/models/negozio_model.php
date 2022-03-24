@@ -7,11 +7,8 @@ class NegozioModel{
     public function aggiungiNegozio($nome, $indirizzo, $tipo){
         require 'application/libs/connection.php';
         if(!empty($nome) && !empty($indirizzo) && !empty($tipo)){
-            $sql = $conn->prepare("INSERT INTO negozio(nome, indirizzo, archiviato, tipo_id, datore_id) VALUES (?, ?, FALSE, ?, ?)");
-            $nome = AntiCsScript::check($nome);
-            $indirizzo = AntiCsScript::check($indirizzo);
-            $sql->bind_param("ssii", $nome, $indirizzo, AntiCsScript::check($tipo), AntiCsScript::check($_SESSION['id']));
-            $result = $sql->execute();
+            $query = "INSERT INTO negozio(nome, indirizzo, archiviato, tipo_id, datore_id) VALUES ('$nome', '$indirizzo', FALSE, '$tipo', " . $_SESSION['id'] . ")";
+            $result = $conn->query($query);
             if ($result) {
                 return TRUE;
             }
@@ -21,7 +18,7 @@ class NegozioModel{
 
     public function ottieniTipi(){
         require 'application/libs/connection.php';
-        $query = "SELECT nome, id FROM tipo WHERE archiviato = 0";
+        $query = "SELECT nome, id FROM tipo";
         $conn->query($query);
         $result = $conn->query($query);
         $data = array();
@@ -36,7 +33,7 @@ class NegozioModel{
 
     public function ottieniNegozi(){
         require 'application/libs/connection.php';
-        $query = "SELECT nome, id FROM negozio WHERE archiviato = 0";
+        $query = "SELECT nome, id FROM negozio";
         $result = $conn->query($query);
         $data = array();
         if ($result->num_rows > 0) {
@@ -64,9 +61,8 @@ class NegozioModel{
 
     public function rimuoviNegozio($id){
         require 'application/libs/connection.php';
-        $sql = $conn->prepare("UPDATE negozio SET archiviato=1 WHERE id =?");
-        $sql->bind_param("i", AntiCsScript::check($id));
-        $result = $sql->execute();
+        $query = "DELETE FROM negozio WHERE id = " . $id;
+        $conn->query($query);
         return true;
     }
 
@@ -75,15 +71,13 @@ class NegozioModel{
         if(!empty($id) && !empty($nome) && !empty($indirizzo) && !empty($tipo)){
             $query = "UPDATE negozio SET nome = '$nome', indirizzo = '$indirizzo', tipo_id = $tipo WHERE id = $id";
             $result = $conn->query($query);
-            $nome = AntiCsScript::check($nome);
-            $indirizzo = AntiCsScript::check($indirizzo);
-            $sql = $conn->prepare("UPDATE negozio SET nome = ?, indirizzo = ?, tipo_id = ? WHERE id = ?");
-            $sql->bind_param("ssii", $nome, $indirizzo, AntiCsScript::check($tipo), AntiCsScript::check($id));
-            if ($sql->execute()) {
+            if ($result) {
                 return TRUE;
             }
         }
         return FALSE;
     }
+
 }
+
 ?>

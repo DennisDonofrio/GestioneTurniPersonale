@@ -8,7 +8,6 @@ require 'application/libs/application.php';
 
 require 'application/libs/controller.php';
 require 'application/libs/view.php';
-require 'application/libs/antiCsScript.php';
 
 // faccio partire l'applicazione
 $app = new Application();
