@@ -17,11 +17,6 @@
             *{
                 font-size: large;
             }
-            body {
-                min-height: 100%;
-                display: grid;
-                grid-template-rows: 1fr auto;
-            }
         </style>
 
     </head>
