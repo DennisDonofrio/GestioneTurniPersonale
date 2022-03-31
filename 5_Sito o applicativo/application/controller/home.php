@@ -5,9 +5,9 @@
         public function index()
         {
             if(isset($_SESSION['role']))
-                $this->view->render('Home/index.php');
+                $this->view->render('home/index.php');
             else
-                $this->view->render('Login/index.php');
+                $this->view->render('login/index.php');
         }
 
         /*public function load(){
