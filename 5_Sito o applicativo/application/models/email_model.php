@@ -23,7 +23,7 @@ class EmailModel{
         if (filter_var($destinatario, FILTER_VALIDATE_EMAIL)) {
             $oggetto = "Aggiornamento orario di lavoro";
             
-            $messaggio =  file_get_contents(URL . "application/views/email/index.php");
+            $messaggio =  file_get_contents(__DIR__ . "../views/email/index.php");
             $messaggio = str_replace("Salve!", "Salve $nome!", $messaggio);
             
             $header = "From:gioele.zanetti@samtrevano.ch\r\n";

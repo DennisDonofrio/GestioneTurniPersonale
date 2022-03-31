@@ -208,7 +208,25 @@ class OrarioModel{
         $conn->query($query);
         $result = $conn->query($query);
         $data = array();
-        while($data[] = $result->fetch_assoc()){}
+        while($row = $result->fetch_assoc()){
+            $data[] = $row;
+        }
+        return $data;
+    }
+
+    public function ottieniOrariInUso(){
+        require 'application/libs/connection.php';
+        $query = "SELECT g.nome, o.inizio, o.fine
+                    FROM usa u
+                    INNER JOIN giorno g on g.id = u.giorno_id
+                    INNER JOIN orario o on o.id = u.orario_id
+                    WHERE u.negozio_id = " . $_SESSION['negozio_id'];
+        $conn->query($query);
+        $result = $conn->query($query);
+        $data = array();
+        while($row = $result->fetch_assoc()){
+            $data[] = $row;
+        }
         return $data;
     }
 }

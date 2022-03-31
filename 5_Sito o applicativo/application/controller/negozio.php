@@ -108,5 +108,38 @@
             }
         }
 
+        public function impostaOrario(){
+            $_SESSION['negozio_id'] = $_POST['negozio'];
+            parent::getModel("orario_model.php");
+            $model = new OrarioModel();
+            $this->view->render("gestioneNegozi/impostaOrario.php", false, array('orari' => json_encode($model->ottieniOrariCompleti()), 'uso' => json_encode($model->ottieniOrariInUso())));
+        }
+
+        public function impostaNegozio(){
+            parent::getModel('negozio_model.php');
+            $model = new NegozioModel();
+            $this->view->render('gestioneNegozi/negozio.php', false, array('negozi' => $model->ottieniNegozi()));
+        }
+
+        public function salvaOrario(){
+            var_dump($_POST);
+            parent::getModel('negozio_model.php');
+            $model = new NegozioModel();
+            $orari = array();
+            $done = false;
+            $counterInput = 0;
+            $giorni = array("lunedi", "martedi", "mercoledi", "giovedi", "venerdi", "sabato", "domenica");
+            for($i=0;$i<count($giorni);$i++){
+                $nome = $giorni[$i] . $counterInput;
+                while(isset($_POST[$nome])){
+                    $orari[] = $_POST[$nome];
+                    $counterInput++;
+                    $nome = $giorni[$i] . $counterInput;
+                }
+            }
+            var_dump($orari);
+            //$this->view->render('gestioneNegozi/negozio.php', false, array('negozi' => $model->ottieniNegozi()));
+        }
+
     }
 ?>

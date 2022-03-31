@@ -81,5 +81,11 @@ class NegozioModel{
         }
         return FALSE;
     }
+
+    public function salvaOrari($orari){
+        require 'application/libs/connection.php';
+
+        return false;
+    }
 }
 ?>
