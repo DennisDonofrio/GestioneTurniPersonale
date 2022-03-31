@@ -6,12 +6,16 @@
 	{
 		private $password;
 
-		function __construct($password)
+		public function __construct($password)
 		{
 			$this->password = $password; 
 		}
 
-		function isValid(){
+		/**
+         * Questo metodo permette di controllare che una password 
+		 * abbia tutte le caratteristiche per essere valida
+         */
+		public function isValid(){
 			$pass = $this->password;
 			$uppercase = preg_match('@[A-Z]@', $pass);
 			$lowercase = preg_match('@[a-z]@', $pass);

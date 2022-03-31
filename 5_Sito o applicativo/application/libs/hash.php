@@ -6,16 +6,24 @@
 	{
 		private $plainText;
 		private $hashedText;
-		function __construct($plainText)
+		public function __construct($plainText)
 		{
 			$this->plainText = $plainText; 
 		}
 
-		function doHash($salt){
+		/**
+         * Viene effettuato l'hash in sha256 della password combinata ad una salt
+         * 
+         * @param String $salt -> testo da utilizzare come salt
+         */
+		public function doHash($salt){
 			$this->hashedText = hash('sha256', $salt . hash('sha256', $this->plainText));
 		}
 
-		function getHashed(){
+		/**
+         * Torna la stringa in sha256
+         */
+		public function getHashed(){
 			return $this->hashedText;
 		}
 	}

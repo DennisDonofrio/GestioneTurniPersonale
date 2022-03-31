@@ -2,6 +2,9 @@
 
     class Home extends Controller
     {
+        /**
+		 * Carica la pagina home degli utenti
+		 */
         public function index()
         {
             if(isset($_SESSION['role']))

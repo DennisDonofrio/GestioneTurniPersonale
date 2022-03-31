@@ -14,7 +14,10 @@
 
         }
 
-        public function ottieniTuttiDatori(){
+        /**
+		 * Torna tutti i datori presenti sul database.
+		 */
+        function ottieniTuttiDatori(){
             require 'application/libs/connection.php';
             $sql = "SELECT id, nome, cognome FROM datore;";
             $result = $conn->query($sql);
@@ -25,7 +28,10 @@
             return $out;
         }
 
-        public function ottieniTuttiDatoriCompleti(){
+        /**
+		 * Torna tutti i datori ancora attivi (non archiviati) sul database.
+		 */
+        function ottieniTuttiDatoriCompleti(){
             require 'application/libs/connection.php';
             $sql = "SELECT * FROM datore WHERE archiviato=0;";
             $result = $conn->query($sql);
@@ -34,7 +40,10 @@
             return $out;
         }
 
-        public function ottieniTuttiDatoriEmail(){
+        /**
+		 * Torna le email di tutti i datori attivi.
+		 */
+        function ottieniTuttiDatoriEmail(){
             require 'application/libs/connection.php';
             $sql = "SELECT id, email FROM datore WHERE archiviato=0;";
             $result = $conn->query($sql);
@@ -43,7 +52,10 @@
             return $out;
         }
 
-        public function ottieniDatiDatore($id){
+        /**
+		 * Torna tutti i dati di tutti i datori attivi.
+		 */
+        function ottieniDatiDatore($id){
             require 'application/libs/connection.php';
             $idChecked = AntiCsScript::check($id);
             $sql = "SELECT * FROM datore WHERE id = $idChecked AND archiviato=0;";
@@ -53,58 +65,82 @@
             return $out;
         }
 
-        public function estraiDatiPost(){
+        /**
+		 * Salva tutte le informazioni dei campi in variabili, 
+         * dopo aver fatto i controlli per la validità delle varie stringhe.
+		 */
+        /*function estraiDatiPost(){
+            if(!empty($_POST['id']) && !empty($_POST['nome']) && !empty($_POST['cognome']) && !empty($_POST['email']) && !empty($_POST['pass1']) && !empty($_POST['pass2']) && !empty($_POST['indirizzo'])){
+                $this->id = $this->test_input($_POST['id']);
+                $this->nome = $this->test_input($_POST['nome']);
+                $this->cognome = $this->test_input($_POST['cognome']);
+                $this->email = $this->test_input($_POST['email']);
+                $this->pass1 = $this->test_input($_POST['pass1']);
+                $this->pass2 = $this->test_input($_POST['pass2']);
+                $this->indirizzo = $this->test_input($_POST['indirizzo']);
+
+                
+            }else{
+                throw new Exception("Completare tutti i campi");
+            }
+        }*/
+
+        /**
+		 * Questo metodo serve per modificare i dati di un datore.
+         * Vengono effettuati i dovuti controlli per la validità dei dati
+		 */
+        function modificaDatore(){
+            require 'application/libs/Connection.php';
             if(!empty($_POST['id']) && !empty($_POST['nome']) && !empty($_POST['cognome']) 
             && !empty($_POST['email']) && !empty($_POST['pass1']) 
             && !empty($_POST['pass2']) && !empty($_POST['indirizzo'])){
-                $this->id = AntiCsScript::check($_POST['id']);
+                require 'application/libs/Hash.php';
+                require 'application/libs/email.php';
+                require 'application/libs/password.php';
+                $this->id =AntiCsScript::check($_POST['id']);
                 $this->nome = AntiCsScript::check($_POST['nome']);
                 $this->cognome = AntiCsScript::check($_POST['cognome']);
                 $this->email = AntiCsScript::check($_POST['email']);
                 $this->pass1 = AntiCsScript::check($_POST['pass1']);
                 $this->pass2 = AntiCsScript::check($_POST['pass2']);
                 $this->indirizzo = AntiCsScript::check($_POST['indirizzo']);
+                $emailUser = new Email($_POST['email']);
+                if($emailUser->isValid()){
+                    if($_POST['pass1'] == $_POST['pass2']){
+                        $passUser = new Password($_POST['pass1']);
+                        if($passUser->isValid()){
+                            $hp = new Hash($this->pass1);
+                            $hp->doHash($this->email);
+                            $this->hash_password = $hp->getHashed();
+                            $sql = $conn->prepare("UPDATE datore set nome=?, cognome=?, email=?, hash_password=?, indirizzo=? WHERE id=?");
+                            $sql->bind_param("sssssi", $this->nome, $this->cognome, $this->email, $this->hash_password, $this->indirizzo, $this->id);
+                            $result = $sql->execute();
+                            return $result;
+                        }else{
+                            throw new Exception("La password deve contenere almeno:<br>- 8 Caratteri<br>-1 Maiuscola<br>-1 Minuscola<br>-1 Cifra<br>-1 Carattere speciale");
+                        }
+                    }else{
+                        throw new Exception("Le due password non corrispondono");
+                    }
+                }else{
+                    throw new Exception("Email non valida");
+                }
+                    
             }else{
                 throw new Exception("Completare tutti i campi");
             }
+            
         }
 
-        public function modificaDatore(){
-            require 'application/libs/Connection.php';
-            $this->estraiDatiPost();
-            require 'application/libs/Hash.php';
-            require 'application/libs/email.php';
-            require 'application/libs/password.php';
-            $emailUser = new Email($_POST['email']);
-            if($emailUser->isValid()){
-                if($_POST['pass1'] == $_POST['pass2']){
-                    $passUser = new Password($_POST['pass1']);
-                    if($passUser->isValid()){
-                        $hp = new Hash($this->pass1);
-                        $hp->doHash($this->email);
-                        $this->hash_password = $hp->getHashed();
-                        $sql = $conn->prepare("UPDATE datore set nome=?, cognome=?, email=?, hash_password=?, indirizzo=? WHERE id=?");
-			            $sql->bind_param("sssssi", $this->nome, $this->cognome, $this->email, $this->hash_password, $this->indirizzo, $this->id);
-                        $result = $sql->execute();
-                    }else{
-                        throw new Exception("La password deve contenere almeno:<br>- 8 Caratteri<br>-1 Maiuscola<br>-1 Minuscola<br>-1 Cifra<br>-1 Carattere speciale");
-                    }
-                }else{
-                    throw new Exception("Le due password non corrispondono");
-                }
-            }else{
-                throw new Exception("Email non valida");
-            }
-        }
-
-        public function sonoPasswordUguali(){
-			return strcmp($this->pass1, $this->pass2);
-		}
-
+        /**
+		 * Archivia un datore dato il suo id
+		 */
         public function eliminaDatore(){
+            
             if(!empty($_POST['id']) && !empty($_POST['email'])){
+                $this->email = AntiCsScript::check($_POST['email']);
                 if(!empty($this->ottieniDatiDatore($_POST['id'])[0]['email'])
-                    && $this->ottieniDatiDatore($_POST['id'])[0]['email'] == $_POST['email']){
+                    && $this->ottieniDatiDatore($_POST['id'])[0]['email'] == $this->email){
                     require 'application/libs/connection.php';
                     $sql = $conn->prepare("UPDATE datore set archiviato=1 WHERE id =?");
                     $id = AntiCsScript::check($_POST['id']);
@@ -118,6 +154,9 @@
             }
         }
 
+        /**
+		 * Aggiunge un nuovo datore utilizando le informazioni dei campi 
+		 */
         public function aggiungiDatore(){
             if(!empty($_POST['nome']) && !empty($_POST['cognome']) 
             && !empty($_POST['email']) && !empty($_POST['pass1']) 
@@ -125,7 +164,6 @@
                 require 'application/libs/Hash.php';
                 require 'application/libs/email.php';
                 require 'application/libs/password.php';
-
                 $emailUser = new Email($_POST['email']);
                 if($emailUser->isValid()){
                     if($_POST['pass1'] == $_POST['pass2']){
@@ -157,5 +195,12 @@
                 throw new Exception("Completare tutti i campi");
             }
         }
+
+        /*function test_input($data) {
+            $data = trim($data);
+            $data = stripslashes($data);
+            $data = htmlspecialchars($data);
+            return $data;
+        }*/
     }
 ?>

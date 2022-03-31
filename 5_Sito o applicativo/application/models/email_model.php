@@ -2,6 +2,9 @@
 
 class EmailModel{
 
+    /**
+     * Trova tutti i dipendenti a cui bisogna inviare la email
+     */
     public function inviaEmailANegozio(){
         require 'application/libs/connection.php';
         $query = $conn->prepare("SELECT d.email, d.nome from dipendente d inner join turno_lavoro t on t.dipendente_id = d.id where t.negozio_id = ? group by d.id");
@@ -19,6 +22,11 @@ class EmailModel{
         }
     }
 
+    /**
+     * Invia l'email al destinatario
+     * @param String $destinatario -> email del destinatario
+     * @param String $nome -> nome del destinatario
+     */
     public function invia($destinatario, $nome) {
         if (filter_var($destinatario, FILTER_VALIDATE_EMAIL)) {
             $oggetto = "Aggiornamento orario di lavoro";

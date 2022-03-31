@@ -6,17 +6,23 @@
 	{
 		private $fullEmail;
 		private $domain;
-		function __construct($fullEmail)
+		public function __construct($fullEmail)
 		{
 			$this->fullEmail = $fullEmail; 
 		}
 
-		function getDomain(){
+		/**
+         * Trova il dominio dell'email
+         */
+		public function getDomain(){
 			$this->domain = substr($this->fullEmail, strpos($this->fullEmail, '@')+1);
 			return $this->domain;
 		}
 
-		function isValid(){
+		/**
+         * Torna se l'email ha tuttte le caratteristiche valide oppure no
+         */
+		public function isValid(){
 			return filter_var($this->fullEmail, FILTER_VALIDATE_EMAIL);
 		}
 	}
