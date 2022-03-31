@@ -10,11 +10,11 @@
         private $hash_password;
         private $indirizzo;
 
-        public function __construct(){
+        function __construct(){
 
         }
 
-        public function ottieniTuttiDatori(){
+        function ottieniTuttiDatori(){
             require 'application/libs/connection.php';
             $sql = "SELECT id, nome, cognome FROM datore;";
             $result = $conn->query($sql);
@@ -25,7 +25,7 @@
             return $out;
         }
 
-        public function ottieniTuttiDatoriCompleti(){
+        function ottieniTuttiDatoriCompleti(){
             require 'application/libs/connection.php';
             $sql = "SELECT * FROM datore WHERE archiviato=0;";
             $result = $conn->query($sql);
@@ -34,7 +34,7 @@
             return $out;
         }
 
-        public function ottieniTuttiDatoriEmail(){
+        function ottieniTuttiDatoriEmail(){
             require 'application/libs/connection.php';
             $sql = "SELECT id, email FROM datore WHERE archiviato=0;";
             $result = $conn->query($sql);
@@ -43,7 +43,7 @@
             return $out;
         }
 
-        public function ottieniDatiDatore($id){
+        function ottieniDatiDatore($id){
             require 'application/libs/connection.php';
             $idChecked = AntiCsScript::check($id);
             $sql = "SELECT * FROM datore WHERE id = $idChecked AND archiviato=0;";
@@ -53,23 +53,21 @@
             return $out;
         }
 
-        public function estraiDatiPost(){
-            if(!empty($_POST['id']) && !empty($_POST['nome']) && !empty($_POST['cognome']) 
-            && !empty($_POST['email']) && !empty($_POST['pass1']) 
-            && !empty($_POST['pass2']) && !empty($_POST['indirizzo'])){
-                $this->id = AntiCsScript::check($_POST['id']);
-                $this->nome = AntiCsScript::check($_POST['nome']);
-                $this->cognome = AntiCsScript::check($_POST['cognome']);
-                $this->email = AntiCsScript::check($_POST['email']);
-                $this->pass1 = AntiCsScript::check($_POST['pass1']);
-                $this->pass2 = AntiCsScript::check($_POST['pass2']);
-                $this->indirizzo = AntiCsScript::check($_POST['indirizzo']);
+        function estraiDatiPost(){
+            if(!empty($_POST['id']) && !empty($_POST['nome']) && !empty($_POST['cognome']) && !empty($_POST['email']) && !empty($_POST['pass1']) && !empty($_POST['pass2']) && !empty($_POST['indirizzo'])){
+                $this->id = $this->test_input($_POST['id']);
+                $this->nome = $this->test_input($_POST['nome']);
+                $this->cognome = $this->test_input($_POST['cognome']);
+                $this->email = $this->test_input($_POST['email']);
+                $this->pass1 = $this->test_input($_POST['pass1']);
+                $this->pass2 = $this->test_input($_POST['pass2']);
+                $this->indirizzo = $this->test_input($_POST['indirizzo']);
             }else{
                 throw new Exception("Completare tutti i campi");
             }
         }
 
-        public function modificaDatore(){
+        function modificaDatore(){
             require 'application/libs/Connection.php';
             $this->estraiDatiPost();
             require 'application/libs/Hash.php';
@@ -97,7 +95,7 @@
             }
         }
 
-        public function sonoPasswordUguali(){
+        function sonoPasswordUguali(){
 			return strcmp($this->pass1, $this->pass2);
 		}
 
@@ -156,6 +154,13 @@
             }else{
                 throw new Exception("Completare tutti i campi");
             }
+        }
+
+        function test_input($data) {
+            $data = trim($data);
+            $data = stripslashes($data);
+            $data = htmlspecialchars($data);
+            return $data;
         }
     }
 ?>

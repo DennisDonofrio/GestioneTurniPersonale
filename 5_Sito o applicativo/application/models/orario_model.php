@@ -14,7 +14,7 @@ class OrarioModel{
     function ottieniDipendentiDiDatore(){
         require 'application/libs/connection.php';
         $query = $conn->prepare("SELECT nome, id FROM dipendente WHERE datore_id = ?");
-        $query->bind_param("i", $_SESSION['negozio_id']);
+        $query->bind_param("i", $_SESSION['id']);
         $query->execute();
         $result = $query->get_result();
         $data = array();
@@ -93,25 +93,29 @@ class OrarioModel{
     }
 
     public function inserisciEventi($conn, $range, $eventi){
-        $inizio = $this->formattaData($range['start']);
-        $fine = $this->formattaData($range['end']);
-        foreach($eventi as $evento){
-            if(strtotime($this->formattaData($evento['start'])) >= strtotime($inizio) && 
-               strtotime($this->formattaData($evento['start'])) >= strtotime($inizio) && 
-               strtotime($this->formattaData($evento['end'])) <= strtotime($fine) && 
-               strtotime($this->formattaData($evento['end'])) <= strtotime($fine)){
-                $query = $conn->prepare("INSERT INTO turno_lavoro VALUES (?, ?, ?, ?, ?)");
-                $dipendente = $this->trovaId($evento['title']);
-                $inizioEvento = $this->formattaOrario($evento['start']);
-                $fineEvento =$this->formattaOrario($evento['end']);
-                $data = $this->formattaData($evento['start']);
-                $query->bind_param("iisss", $dipendente, $_SESSION['negozio_id'], $inizioEvento, $fineEvento, $data);
-                if(!$query->execute()){
-                    return false;
+        try{
+            $inizio = $this->formattaData($range['start']);
+            $fine = $this->formattaData($range['end']);
+            foreach($eventi as $evento){
+                if(strtotime($this->formattaData($evento['start'])) >= strtotime($inizio) && 
+                strtotime($this->formattaData($evento['start'])) >= strtotime($inizio) && 
+                strtotime($this->formattaData($evento['end'])) <= strtotime($fine) && 
+                strtotime($this->formattaData($evento['end'])) <= strtotime($fine)){
+                    $query = $conn->prepare("INSERT INTO turno_lavoro VALUES (?, ?, ?, ?, ?)");
+                    $dipendente = $this->trovaId($evento['title']);
+                    $inizioEvento = $this->formattaOrario($evento['start']);
+                    $fineEvento =$this->formattaOrario($evento['end']);
+                    $data = $this->formattaData($evento['start']);
+                    $query->bind_param("iisss", $dipendente, $_SESSION['negozio_id'], $inizioEvento, $fineEvento, $data);
+                    if(!$query->execute()){
+                        return false;
+                    }
                 }
             }
+            return true;
+        }catch(Exception $e){
+            return false;
         }
-        return true;
     }
 
     public function formattaData($data){
@@ -124,7 +128,11 @@ class OrarioModel{
     }
 
     public function trovaId($titolo){
-        return substr($titolo, 1, strpos($titolo, ')') - 1);
+        if(strpos($titolo, ')') >= 2){
+            return substr($titolo, 1, strpos($titolo, ')') - 1);
+        }else{
+            throw new Exception("Id non valido");
+        }
     }
 
     public function aggiungiOrario(){

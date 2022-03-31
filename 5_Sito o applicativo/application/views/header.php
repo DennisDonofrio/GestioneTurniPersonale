@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="<?php echo URL; ?>application/public/css/bootstrap/css/bootstrap.css">
         <link rel="stylesheet" href="<?php echo URL; ?>application/public/css/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="<?php echo URL; ?>application/public/css/bootstrap/icons/bootstrap-icons.css">
+        <link href='<?php echo URL; ?>application/public/calendar/lib/main.css' rel='stylesheet'/>
         
         <script src="<?php echo URL; ?>public/js/jquery.js"></script>
 
@@ -20,7 +21,7 @@
 
     </head>
     <body>
-        <div >
+        <div>
             <div id="header">
                 <?php if(!empty($_SESSION['id'])) : ?>
                     <a style="margin-right: 20px" href="<?php echo URL; ?>home"><i class="bi bi-house-door-fill fa-lg" style="font-size: 25px"></i></a>   

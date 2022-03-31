@@ -28,7 +28,7 @@
 			$sql1->bind_param("ss", $this->email, $this->hashedPassword);
 			$sql2 = $conn->prepare("SELECT * FROM datore WHERE email=? AND hash_password=? AND archiviato=0");
 			$sql2->bind_param("ss", $this->email, $this->hashedPassword);
-			$sql3 = $conn->prepare("SELECT * FROM amministratore WHERE email=? AND hash_password=? AND in_uso=1");
+			$sql3 = $conn->prepare("SELECT * FROM amministratore WHERE email=? AND hash_password=?");
             $sql3->bind_param("ss", $this->email, $this->hashedPassword);
 			//$sql1 = "SELECT * FROM dipendente WHERE email='$this->email' AND hash_password='$this->hashedPassword' AND archiviato=0";
 			//$sql2 = "SELECT * FROM datore WHERE email='$this->email' AND hash_password='$this->hashedPassword' AND archiviato=0";

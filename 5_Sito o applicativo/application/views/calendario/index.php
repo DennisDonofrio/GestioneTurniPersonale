@@ -1,23 +1,23 @@
 <script src='<?php echo URL; ?>application/public/calendar/lib/main.js'></script>
 <script>
-    
 
-    var calendar;
+    var calendarEl = null
+    var calendar = null
     document.addEventListener('DOMContentLoaded', function() {
-        var Draggable = FullCalendar.Draggable;
-        var containerEl = document.getElementById('external-events');
-        var checkbox = document.getElementById('drop-remove');
+        var Draggable = FullCalendar.Draggable
+        var containerEl = document.getElementById('external-events')
+        var checkbox = document.getElementById('drop-remove')
 
         new Draggable(containerEl, {
             itemSelector: '.fc-event',
             eventData: function(eventEl) {
-            return {
-                title: eventEl.innerText
-            };
+                return {
+                    title: eventEl.innerText
+                }
             }
-        });
+        })
 
-        var calendarEl = document.getElementById('calendar');
+        calendarEl = document.getElementById('calendar');
         calendar = new FullCalendar.Calendar(calendarEl, {
             headerToolbar: {
                 left: 'dayGridMonth,timeGridWeek,timeGridDay',
@@ -55,13 +55,13 @@
                 }
             ],
 
-            events: [
+            /*events: [
                 {
                     id: 2,
-                    title: 'a',
-                    start: '2022-03-10'
+                    title: '(1) a',
+                    start: '2022-03-17'
                 }
-            ]
+            ]*/
             
         });
         calendar.render();
@@ -76,18 +76,24 @@
     })
 
     function ottieniEventi(){
+        var loading = document.getElementById("loading")
+        loading.style.display = "block"
         var events = calendar.getEvents()
-        var context = events[0]._context;
+        if(events[0] == undefined || events[0] == null){
+            loading.style.display = "none"
+            return;
+        }
+        var context = events[0]._context
         var startDate = context.dateProfile.currentRange.start
         var endDate = context.dateProfile.currentRange.end
         var req = new XMLHttpRequest();
 
-        req.open("POST", "<?php echo URL; ?>calendario/prova", false);
+        req.open("POST", "<?php echo URL; ?>calendario/salva", true);
         //non riusciva a capire il risultato in json
         req.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
 
         var jsonEvents = "[";
-        console.log(events[0])
+        
         for(var i = 0; i< events.length;i++){
             jsonEvents += JSON.stringify({
                 title: events[i]._def.title, 
@@ -99,7 +105,6 @@
             }
         }
         jsonEvents += "]"
-        console.log(jsonEvents)
 
         var range = JSON.stringify(
             {
@@ -115,8 +120,21 @@
 
         req.send("data=" + request)
 
+        req.onreadystatechange = function() {
+            if (req.readyState === 4){
+                var json = JSON.parse(req.response)
+                if(json.status == "rollback"){
+                    calendar.render()
+                    window.alert("Non è stato possibile salvare la configurazione, gli orari impostati non sono corretti")
+                }else{
+                    var mailReq = new XMLHttpRequest();
+                    mailReq.open("GET", "<?php echo URL; ?>mail/invia", true);
+                    mailReq.send();
+                }
+                loading.style.display = "none"
+            }
+        }
 
-        
     }
 </script>
 
@@ -132,7 +150,7 @@
   <?php foreach($data['dipendenti'] as $dipendente): ?>
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
         <div class='fc-event-main'>
-            <?php echo $dipendente['nome']; ?>
+            <?php echo "(" . $dipendente['id'] . ") " .  $dipendente['nome']; ?>
         </div>
     </div>
   <?php endforeach; ?>
@@ -142,3 +160,5 @@
 <div id='calendar-container'>
   <div id='calendar'></div>
 </div>
+
+<div class="lds-default" style="position:absolute;top: 50%; left:50%; z-index: 200; display:none" id="loading"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
