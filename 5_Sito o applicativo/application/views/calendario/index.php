@@ -4,18 +4,18 @@
     var calendarEl = null
     var calendar = null
     document.addEventListener('DOMContentLoaded', function() {
-        var Draggable = FullCalendar.Draggable
-        var containerEl = document.getElementById('external-events')
-        var checkbox = document.getElementById('drop-remove')
+        var Draggable = FullCalendar.Draggable;
+        var containerEl = document.getElementById('external-events');
+        var checkbox = document.getElementById('drop-remove');
 
         new Draggable(containerEl, {
             itemSelector: '.fc-event',
             eventData: function(eventEl) {
-                return {
-                    title: eventEl.innerText
-                }
+            return {
+                title: eventEl.innerText
+            };
             }
-        })
+        });
 
         calendarEl = document.getElementById('calendar');
         calendar = new FullCalendar.Calendar(calendarEl, {
@@ -55,13 +55,13 @@
                 }
             ],
 
-            /*events: [
+            events: [
                 {
                     id: 2,
-                    title: '(1) a',
-                    start: '2022-03-17'
+                    title: 'a',
+                    start: '2022-03-10'
                 }
-            ]*/
+            ]
             
         });
         calendar.render();
@@ -88,7 +88,7 @@
         var endDate = context.dateProfile.currentRange.end
         var req = new XMLHttpRequest();
 
-        req.open("POST", "<?php echo URL; ?>calendario/salva", true);
+        req.open("POST", "<?php echo URL; ?>calendario/prova", false);
         //non riusciva a capire il risultato in json
         req.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
 
@@ -105,6 +105,7 @@
             }
         }
         jsonEvents += "]"
+        console.log(jsonEvents)
 
         var range = JSON.stringify(
             {
@@ -135,6 +136,7 @@
             }
         }
 
+        
     }
 </script>
 
@@ -150,7 +152,7 @@
   <?php foreach($data['dipendenti'] as $dipendente): ?>
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
         <div class='fc-event-main'>
-            <?php echo "(" . $dipendente['id'] . ") " .  $dipendente['nome']; ?>
+            <?php echo $dipendente['nome']; ?>
         </div>
     </div>
   <?php endforeach; ?>

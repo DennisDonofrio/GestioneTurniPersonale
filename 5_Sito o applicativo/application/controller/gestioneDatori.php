@@ -14,6 +14,14 @@
             $this->view->render("gestioneDatori/mostra.php");
         }
 
+        public function mostra(){
+            require 'application/models/datoreModel.php';
+            $model = new DatoreModel();
+            $this->view->data = $model->ottieniTuttiDatoriCompleti();
+            $this->view->template = array("id", "nome", "cognome", "email", "indirizzo");
+            $this->view->render("gestioneDatori/mostra.php");
+        }
+
         public function modifica(){
             require 'application/models/datoreModel.php';
             $model = new DatoreModel();

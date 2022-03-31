@@ -23,12 +23,12 @@ insert into giorno values(5,'Venerdì');
 insert into giorno values(6,'Sabato');
 insert into giorno values(7,'Domenica');
 
-insert into orario_turno values('08:00:00', '10:00:00', 1);
-insert into orario_turno values('10:00:00', '12:30:00', 1);
-insert into orario_turno values('14:00:00', '16:00:00', 1);
-insert into orario_turno values('16:00:00', '18:00:00', 1);
-insert into orario_turno values('23:00:00', '07:00:00', 2);
-insert into orario_turno values('18:00:00', '23:00:00', 2);
+insert into orario_turno values('08:00:00', '10:00:00');
+insert into orario_turno values('10:00:00', '12:30:00');
+insert into orario_turno values('14:00:00', '16:00:00');
+insert into orario_turno values('16:00:00', '18:00:00');
+insert into orario_turno values('23:00:00', '07:00:00');
+insert into orario_turno values('18:00:00', '23:00:00');
 
 insert into usa values(1, 1, 1, 1);
 insert into usa values(1, 1, 2, 1);
