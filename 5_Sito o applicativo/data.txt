@@ -1,7 +1,7 @@
 insert into datore values (1, "Andrea", "Curti", "a.c@gmail.com", "bc7353cb7ab19d65ac5474e2d47433935c4b67b4e66a9525d72676ba537dfa25", "", 0);
 insert into dipendente values (1, "Dennis", "Donofrio", "d.d@gmail.com", "03b7916c647cb13a0622fb9c3b9b4a6efaeaa72b03e8463fe2e1e4b0c7a33dbe", "", 1, 0);
 insert into dipendente values (2, "Gioele", "Zanetti", "g.z@gmail.com", "b70b6d646df6917df9016a3d37a4c1c28001550f943b29a7c6ce1118a4da2fba", "", 1, 0);
-insert into amministratore values (1, "Admin", "", "admin@gmail.com", "bd0b82f16357b637a9cd85bebdf267a9dcccd1fbcf5bbcdc07323cedbb9a319d", "", 0);
+insert into amministratore values (1, "Admin", "", "admin@gmail.com", "e9aab55be8be8aa37d9051a87be7d0223b6fb1766fedf842ed02892afc08c6fc", "", 1);
 
 insert into tipo values(1, 'Alimentari', 'Cibo e bevande');
 insert into tipo values(2, 'Vestiario', 'Qualsiasi tipo di vestito');

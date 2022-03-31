@@ -3,19 +3,19 @@
         <tr>
             <div>
                 <td>
-                    <input type="submit" class="btn btn-dark btn-lg" style="height: 5em; width: 15em" name="aggiungi" value="Aggiungi datore">
+                    <input type="button" class="btn btn-dark btn-lg" style="height: 5em; width: 12em" onclick="window.location.href='<?php echo URL; ?>gestioneDatori/aggiungi'" value="Aggiungi datore">
                 </td>
                 <td>
-                    <input type="submit" class="btn btn-dark btn-lg" style="height: 5em; width: 15em" name="modifica" value="Modifica datore">
+                    <input type="button" class="btn btn-dark btn-lg" style="height: 5em; width: 12em" onclick="window.location.href='<?php echo URL; ?>gestioneDatori/modifica'" value="Modifica datore">
                 </td>
             </div>
         </tr>
             <div>
                 <td>
-                    <input type="submit" class="btn btn-dark btn-lg" style="height: 5em; width: 15em" name="rimuovi" value="Rimuovi datore">
+                    <input type="button" class="btn btn-dark btn-lg" style="height: 5em; width: 12em" onclick="window.location.href='<?php echo URL; ?>gestioneDatori/rimuovi'" value="Rimuovi datore">
                 </td>
                 <td>
-                    <input type="submit" class="btn btn-dark btn-lg" style="height: 5em; width: 15em" name="mostra" value="Mostra datore">
+                    <input type="button" class="btn btn-dark btn-lg" style="height: 5em; width: 12em" onclick="window.location.href='<?php echo URL; ?>gestioneDatori/mostra'" value="Mostra datore">
                 </td>
             </div>
         </tr>

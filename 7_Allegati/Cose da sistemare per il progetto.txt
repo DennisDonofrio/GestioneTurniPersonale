@@ -1,0 +1,7 @@
+- Controllare che all'aggiunta di un nuovo datore o dipendete non esista già con la stessa email
+
+- Nella modifica datori dare la possibilità di modificare solo quelli non archiviati
+
+- Nella schermata di mostra dipendenti, se non ci sono deve mostrare "nessun dipendete" e non "nessun negozio"
+
+- Poter attribuire l'orario ad un negozio e modificarlo

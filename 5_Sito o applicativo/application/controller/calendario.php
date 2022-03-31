@@ -1,6 +1,6 @@
 <?php
 
-class Calendario extends Controller{
+    class Calendario extends Controller{
 
     public function impostaNegozio(){
         $_SESSION['negozio_id'] = $_POST['negozio'];
@@ -11,15 +11,15 @@ class Calendario extends Controller{
         $fine = new DateTime('2030-01-01');
     }
 
-    public function ottieniEventi(){
-        parent::getModel('orario_model.php');
-        $inizio = $_GET['start'];
-        $fine = $_GET['end'];
-        $model = new OrarioModel();
-        $json = json_encode($model->ottieniEventiInRange($inizio, $fine));
-        echo $json;
-        return $json;
-    }
+        public function ottieniEventi(){
+            parent::getModel('orario_model.php');
+            $inizio = $_GET['start'];
+            $fine = $_GET['end'];
+            $model = new OrarioModel();
+            $json = json_encode($model->ottieniEventiInRange($inizio, $fine));
+            echo $json;
+            return $json;
+        }
 
     public function salva(){
         $data = json_decode($_POST['data'], true);
@@ -32,6 +32,6 @@ class Calendario extends Controller{
         echo json_encode(array("status" => $model->salva($range, $events)));
     }
 
-}
+    }
 
 ?>

@@ -127,6 +127,16 @@ class OrarioModel{
         return substr($titolo, 1, strpos($titolo, ')') - 1);
     }
 
+    public function ottieniOrariCompleti(){
+        require 'application/libs/connection.php';
+        $query = "SELECT id, inizio, fine
+                    FROM orario";
+        $conn->query($query);
+        $result = $conn->query($query);
+        $data = array();
+        while($data[] = $result->fetch_assoc()){}
+        return $data;
+    }
 }
 
 ?>
