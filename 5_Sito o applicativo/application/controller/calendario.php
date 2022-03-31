@@ -28,7 +28,6 @@
         $events = json_decode($data['events'], true);
         parent::getModel('orario_model.php');
         $model = new OrarioModel();
-
         echo json_encode(array("status" => $model->salva($range, $events)));
     }
 

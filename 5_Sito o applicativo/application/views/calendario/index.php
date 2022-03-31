@@ -1,8 +1,8 @@
 <script src='<?php echo URL; ?>application/public/calendar/lib/main.js'></script>
 <script>
-    
 
-    var calendar
+    var calendarEl = null
+    var calendar = null
     document.addEventListener('DOMContentLoaded', function() {
         var Draggable = FullCalendar.Draggable
         var containerEl = document.getElementById('external-events')
@@ -17,7 +17,7 @@
             }
         })
 
-        var calendarEl = document.getElementById('calendar');
+        calendarEl = document.getElementById('calendar');
         calendar = new FullCalendar.Calendar(calendarEl, {
             headerToolbar: {
                 left: 'dayGridMonth,timeGridWeek,timeGridDay',
@@ -76,8 +76,14 @@
     })
 
     function ottieniEventi(){
+        var loading = document.getElementById("loading")
+        loading.style.display = "block"
         var events = calendar.getEvents()
-        var context = events[0]._context;
+        if(events[0] == undefined || events[0] == null){
+            loading.style.display = "none"
+            return;
+        }
+        var context = events[0]._context
         var startDate = context.dateProfile.currentRange.start
         var endDate = context.dateProfile.currentRange.end
         var req = new XMLHttpRequest();
@@ -87,6 +93,7 @@
         req.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
 
         var jsonEvents = "[";
+        
         for(var i = 0; i< events.length;i++){
             jsonEvents += JSON.stringify({
                 title: events[i]._def.title, 
@@ -117,9 +124,14 @@
             if (req.readyState === 4){
                 var json = JSON.parse(req.response)
                 if(json.status == "rollback"){
-                    calendar.render();
+                    calendar.render()
                     window.alert("Non è stato possibile salvare la configurazione, gli orari impostati non sono corretti")
+                }else{
+                    var mailReq = new XMLHttpRequest();
+                    mailReq.open("GET", "<?php echo URL; ?>mail/invia", true);
+                    mailReq.send();
                 }
+                loading.style.display = "none"
             }
         }
 
@@ -148,3 +160,5 @@
 <div id='calendar-container'>
   <div id='calendar'></div>
 </div>
+
+<div class="lds-default" style="position:absolute;top: 50%; left:50%; z-index: 200; display:none" id="loading"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
