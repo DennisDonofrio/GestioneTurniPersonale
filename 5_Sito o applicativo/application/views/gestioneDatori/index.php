@@ -1,3 +1,4 @@
+<form action="<?php echo URL ?>gestioneDatori/action" method="POST">
     <table style="margin: auto; margin-right:auto; margin-top:3em;">
         <tr>
             <div>
@@ -19,3 +20,4 @@
             </div>
         </tr>
     </table>
+</form>

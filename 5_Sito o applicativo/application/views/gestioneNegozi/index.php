@@ -19,10 +19,4 @@
                 </td>
             </div>
         </tr>
-            <div>
-                <td colspan="2">
-                    <input type="button" class="btn btn-dark btn-lg" style="height: 5em; width: 20em" onclick="window.location.href='<?php echo URL; ?>negozio/impostaNegozio'" value="Imposta orario">
-                </td>
-            </div>
-        </tr>
     </table>

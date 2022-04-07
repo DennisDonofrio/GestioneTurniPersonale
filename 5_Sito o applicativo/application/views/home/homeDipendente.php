@@ -8,14 +8,7 @@
         var containerEl = document.getElementById('external-events')
         var checkbox = document.getElementById('drop-remove')
 
-        new Draggable(containerEl, {
-            itemSelector: '.fc-event',
-            eventData: function(eventEl) {
-                return {
-                    title: eventEl.innerText
-                }
-            }
-        })
+        
 
         calendarEl = document.getElementById('calendar');
         calendar = new FullCalendar.Calendar(calendarEl, {
@@ -27,13 +20,8 @@
             initialView: 'timeGridWeek',
             height: document.body.clientHeight - 230,
             locale: 'it',
-            editable: true,
+            editable: false,
             dayMaxEvents: true,
-
-            eventClick: function(info) {
-                if(window.confirm("Vuoi davvero eliminare questo evento?"))
-                    info.event.remove()
-            },
 
             eventMouseEnter: function(info) {
                 info.event._def.ui.backgroundColor = '#4374E6'
@@ -47,7 +35,7 @@
 
             eventSources: [
                 {
-                    url: '<?php echo URL; ?>calendario/ottieniEventi',
+                    url: '<?php echo URL; ?>calendario/ottieniEventiDipendente/<?php echo $_SESSION['id']; ?>',
                     method: 'GET',
                     failure: function() {
                         alert('there was an error while fetching events!');
@@ -138,27 +126,6 @@
     }
 </script>
 
-<div id='save'>
-    <input type="submit" class="btn btn-dark" value="Salva" name="salva" onclick="ottieniEventi()">
-</div>
-
-<div id='external-events'>
-  <p>
-    <strong>Dipendenti</strong>
-  </p>
-
-  <?php foreach($data['dipendenti'] as $dipendente): ?>
-    <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-        <div class='fc-event-main'>
-            <?php echo "(" . $dipendente['id'] . ") " .  $dipendente['nome']; ?>
-        </div>
-    </div>
-  <?php endforeach; ?>
-  
-</div>
-
-<div id='calendar-container'>
+<div id='calendar-container2'>
   <div id='calendar'></div>
 </div>
-
-<div class="lds-default" style="position:absolute;top: 50%; left:50%; z-index: 200; display:none" id="loading"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>

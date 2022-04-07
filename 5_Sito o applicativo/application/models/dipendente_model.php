@@ -2,9 +2,6 @@
 
 class DipendenteModel{
     
-    /**
-     * Torna tutte le informazioni dei dipendenti di un determinato negozio
-     */
     public function ottieniDipendenti(){
         require 'application/libs/connection.php';
         $query = "SELECT di.id, di.nome , di.cognome, di.email, di.indirizzo 
@@ -20,10 +17,6 @@ class DipendenteModel{
         return false;
     }
 
-    /**
-     * Torna le informazioni di un dipendente che ha un determinato id
-     * @param Int $id -> l'id del dipendente da cercare
-     */
     public function ottieniDipendente($id){
         require 'application/libs/connection.php';
         $sql = $conn->prepare("SELECT di.id, di.nome , di.cognome, di.email, di.indirizzo FROM dipendente di WHERE di.id = ? AND archiviato = 0");
@@ -39,14 +32,6 @@ class DipendenteModel{
         return false;
     }
 
-    /**
-     * Aggiunge un nuovo dipendente con le relative informazioni
-     * @param String $nome -> il nome del dipendente
-     * @param String $cognome -> il cognome del dipendente
-     * @param String $email -> l'email del dipendente
-     * @param String $indirizzo -> l'indirizzo del dipendente
-     * @param String $pass -> la password del dipendente
-     */
     public function aggiungiDipendente($nome, $cognome, $email, $indirizzo, $pass){
         require 'application/libs/connection.php';
         require 'application/libs/hash.php';
@@ -54,6 +39,7 @@ class DipendenteModel{
             $hp = new Hash($pass);
 			$hp->doHash($email);
 			$hash_password = $hp->getHashed();
+
             $sql = $conn->prepare("INSERT INTO dipendente(nome, cognome, indirizzo, email, hash_password, archiviato, datore_id) VALUES (?, ?, ?, ?, ?, 0, ?)");
             $nome = AntiCsScript::check($nome);
             $cognome = AntiCsScript::check($cognome);
@@ -68,10 +54,6 @@ class DipendenteModel{
         return FALSE;
     }
 
-    /**
-     * Rimuove un dipendete che ha un determinato id
-     * @param Int $id -> l'id del dipendente da eliminare
-     */
     public function rimuoviDipendente($id){
         require 'application/libs/connection.php';
         $sql = $conn->prepare("UPDATE dipendente SET archiviato = 1 WHERE id = ?");
@@ -80,15 +62,6 @@ class DipendenteModel{
         return $result;
     }
 
-    /**
-     * Modifica un dipendente con le nuove informazioni passate
-     * @param Int $id -> id del dipendente
-     * @param String $nome -> il nome del dipendente
-     * @param String $cognome -> il cognome del dipendente
-     * @param String $indirizzo -> l'indirizzo del dipendente
-     * @param String $email -> l'email del dipendente
-     * @param String $pass -> la password del dipendente
-     */
     public function modificaDipendente($id, $nome, $cognome, $indirizzo, $email, $pass){
         require 'application/libs/connection.php';
         require 'application/libs/hash.php';
