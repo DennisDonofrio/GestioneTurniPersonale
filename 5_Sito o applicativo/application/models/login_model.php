@@ -14,6 +14,9 @@
 			$this->password = AntiCsScript::check($password); 
 		}
 
+		/**
+		 * Calcola l'hash della password in sha256
+		 */
 		function getHashedPass(){
 			require 'application/libs/hash.php';
 			$hashUser = new Hash($this->password);
@@ -21,6 +24,10 @@
 			$this->hashedPassword = $hashUser->getHashed();
 		}
 
+		/**
+		 * Viene controllato se le credenziali d'accesso sono valide,
+		 * in caso di si, salva anche di che tipo è l'utente
+		 */
 		function doLogin(){
 			require 'application/libs/connection.php';
             $this->getHashedPass();
@@ -30,9 +37,6 @@
 			$sql2->bind_param("ss", $this->email, $this->hashedPassword);
 			$sql3 = $conn->prepare("SELECT * FROM amministratore WHERE email=? AND hash_password=?");
             $sql3->bind_param("ss", $this->email, $this->hashedPassword);
-			//$sql1 = "SELECT * FROM dipendente WHERE email='$this->email' AND hash_password='$this->hashedPassword' AND archiviato=0";
-			//$sql2 = "SELECT * FROM datore WHERE email='$this->email' AND hash_password='$this->hashedPassword' AND archiviato=0";
-			//$sql3 = "SELECT * FROM amministratore WHERE email='$this->email' AND hash_password='$this->hashedPassword'";
 			for($i=1;$i<=3;$i++){
 				$currentQuery = 'sql' . $i;
 				$$currentQuery->execute();

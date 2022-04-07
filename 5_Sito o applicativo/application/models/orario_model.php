@@ -53,32 +53,6 @@ class OrarioModel{
         return false;
     }
 
-    public function ottieniEventiInRangeDipendente($inizio, $fine, $id){
-        require 'application/libs/connection.php';
-        $query = $conn->prepare("SELECT d.id, d.nome, o.orario_turno_inizio, o.orario_turno_fine, o.data
-        FROM turno_lavoro o 
-        INNER JOIN dipendente d
-        ON d.id = o.dipendente_id
-        WHERE o.negozio_id = ? AND o.data BETWEEN ? AND ? AND o.dipendente_id = ?");
-        $inizio = $this->formattaData($inizio);
-        $fine = $this->formattaData($fine);
-        $query->bind_param("issi", $_SESSION['negozio_id'], $inizio, $fine, $id);
-        $query->execute();
-        $result = $query->get_result();
-        $data = array();
-        if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()){
-                $data[] = array(
-                    'title' => "(" . $row['id'] . ")" . " " . $row['nome'],
-                    'start' => $row['data'] . "T". $row['orario_turno_inizio'],
-                    'end' => $row['data'] . "T" . $row['orario_turno_fine'],
-                );
-            }
-            return $data;
-        }
-        return false;
-    }
-
     public function cominciaTransazione($conn){
         $conn->begin_transaction();
     }
@@ -171,15 +145,9 @@ class OrarioModel{
                 $data = $this->ottieniOrari($inizio, $fine);
                 if($data == false){
                     require 'application/libs/connection.php';
-                    /*$query = "INSERT INTO orario(inizio, fine) VALUES('$inizio', '$fine')";
+                    $query = "INSERT INTO orario(inizio, fine) VALUES('$inizio', '$fine')";
                     $conn->query($query);
-                    $result = $conn->query($query);*/
-
-                    $sql = $conn->prepare("INSERT INTO orario(inizio, fine) VALUES(?, ?)");
-                    $inizio = AntiCsScript::check($inizio);
-                    $fine = AntiCsScript::check($fine);
-                    $sql->bind_param("ss",$inizio, $fine);
-                    $result = $sql->execute();
+                    $result = $conn->query($query);
                 }else{
                     throw new Exception("Questi orari sono già presenti");
                 }
@@ -201,17 +169,10 @@ class OrarioModel{
                 $data = $this->ottieniOrari($inizio, $fine);
                 if($data == false){
                     require 'application/libs/connection.php';
-                    /*$query = "UPDATE orario set inizio = '$inizio', fine = '$fine'
+                    $query = "UPDATE orario set inizio = '$inizio', fine = '$fine'
                                 WHERE id = ".$_POST['orario'].";";
                     $conn->query($query);
-                    $result = $conn->query($query);*/
-
-                    $sql = $conn->prepare("UPDATE orario set inizio = ?, fine = ? WHERE id = ?;");
-                    $inizio = AntiCsScript::check($inizio);
-                    $fine = AntiCsScript::check($fine);
-                    $orario = AntiCsScript::check($_POST['orario']);
-                    $sql->bind_param("sss",$inizio, $fine, $orario);
-                    $result = $sql->execute();
+                    $result = $conn->query($query);
                 }else{
                     throw new Exception("Questi orari sono già presenti");
                 }
@@ -247,7 +208,25 @@ class OrarioModel{
         $conn->query($query);
         $result = $conn->query($query);
         $data = array();
-        while($data[] = $result->fetch_assoc()){}
+        while($row = $result->fetch_assoc()){
+            $data[] = $row;
+        }
+        return $data;
+    }
+
+    public function ottieniOrariInUso(){
+        require 'application/libs/connection.php';
+        $query = "SELECT g.nome, o.inizio, o.fine
+                    FROM usa u
+                    INNER JOIN giorno g on g.id = u.giorno_id
+                    INNER JOIN orario o on o.id = u.orario_id
+                    WHERE u.negozio_id = " . $_SESSION['negozio_id'];
+        $conn->query($query);
+        $result = $conn->query($query);
+        $data = array();
+        while($row = $result->fetch_assoc()){
+            $data[] = $row;
+        }
         return $data;
     }
 }

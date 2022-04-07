@@ -41,7 +41,7 @@ CREATE TABLE dipendente(
 DROP TABLE IF EXISTS tipo;
 CREATE TABLE tipo(
 	id INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(25),
+    nome VARCHAR(25) UNIQUE,
     descrizione TEXT
 );
 

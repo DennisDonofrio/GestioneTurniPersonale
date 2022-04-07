@@ -27,16 +27,6 @@
             return $json;
         }
 
-        public function ottieniEventiDipendente($id){
-            parent::getModel('orario_model.php');
-            $inizio = $_GET['start'];
-            $fine = $_GET['end'];
-            $model = new OrarioModel();
-            $json = json_encode($model->ottieniEventiInRangeDipendente($inizio, $fine, $id));
-            echo $json;
-            return $json;
-        }
-
         public function salva(){
             $data = json_decode($_POST['data'], true);
             
