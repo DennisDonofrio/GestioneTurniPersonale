@@ -11,6 +11,10 @@ class OrarioModel{
     
     }*/
 
+    /**
+     * Questa funzionr serve per ottenere i dipendenti
+     * di un datore
+     */
     function ottieniDipendentiDiDatore(){
         require 'application/libs/connection.php';
         $query = $conn->prepare("SELECT nome, id FROM dipendente WHERE datore_id = ?");
@@ -27,6 +31,12 @@ class OrarioModel{
         return false;
     }
 
+    /**
+     * Questa funzione serve per ottenere gli eventi (turni di lavoro)
+     * in un certo range
+     * @param inizio la data da cui cominciare a cercare
+     * @param fine la diata in cui la ricerca finisce
+     */
     public function ottieniEventiInRange($inizio, $fine){
         require 'application/libs/connection.php';
         $query = $conn->prepare("SELECT d.id, d.nome, o.orario_turno_inizio, o.orario_turno_fine, o.data
@@ -79,18 +89,32 @@ class OrarioModel{
         return false;
     }
 
+    /**
+     * Questa funzione serve per cominciare una transazione
+     */
     public function cominciaTransazione($conn){
         $conn->begin_transaction();
     }
 
+    /**
+     * Questa funzione fa il commit di una transazione
+     */
     public function commit($conn){
         $conn->commit();
     }
 
+    /**
+     * Questa funzione fa il rollback di una transazione
+     */
     public function rollback($conn){
         $conn->rollback();
     }
 
+    /**
+     * Questa funzione salva i nuovi orari nel database
+     * @param range il range di eventi da rimuovere
+     * @param eventi i nuovi evennti da inserire
+     */
     public function salva($range, $eventi){
         require 'application/libs/connection.php';
         mysqli_autocommit($conn, false);
@@ -107,6 +131,11 @@ class OrarioModel{
         $conn->close();
     }
 
+    /**
+     * Questa funzione serve per rimuovere gli eventi in un certo range
+     * @param conn la connessione al database
+     * @param range il range in cui rimuovere gli eventi
+     */
     public function rimuoviEventiInRange($conn, $range){
         $inizio = $this->formattaData($range['start']);
         $fine = $this->formattaData($range['end']);
@@ -118,6 +147,12 @@ class OrarioModel{
         }
     }
 
+    /**
+     * Questa funzione inserisce gli eventi in un certo range
+     * @param conn la connessione al db
+     * @param range il range di eventi da inserire
+     * @param eventi gli eventi da inserire
+     */
     public function inserisciEventi($conn, $range, $eventi){
         try{
             $inizio = $this->formattaData($range['start']);
@@ -144,15 +179,27 @@ class OrarioModel{
         }
     }
 
+    /**
+     * Questa funzione serve per formattare la data
+     * dal formato del calendario
+     */
     public function formattaData($data){
         return substr($data, 0, strpos($data, 'T'));
     }
 
+    /**
+     * Questa funzione serve per formattare un orario
+     * dal formato del calendario
+     */
     public function formattaOrario($data){
         $raw = substr($data, strpos($data, 'T') + 1);
         return substr($raw, 0, strlen($raw) - 5);
     }
 
+    /**
+     * Questa funzione serve per trovare l'id del dipendente 
+     * dal titolo dell'evento
+     */
     public function trovaId($titolo){
         if(strpos($titolo, ')') >= 2){
             return substr($titolo, 1, strpos($titolo, ')') - 1);
@@ -161,6 +208,9 @@ class OrarioModel{
         }
     }
 
+    /**
+     * Questa funzione serve per inserire gli orari di apertura e chiusura nel db  
+     */
     public function aggiungiOrario(){
         if(!empty($_POST['inizio']) && !empty($_POST['fine'])){
             $tinizio = mktime(substr($_POST['inizio'], 0, 2), substr($_POST['inizio'], 3, 2));
@@ -191,6 +241,9 @@ class OrarioModel{
         }
     }
 
+    /**
+     * Questa funzione serve per modifcare un orario 
+     */
     public function modificaOrario(){
         if(!empty($_POST['inizio']) && !empty($_POST['fine'] && !empty($_POST['orario']))){
             $tinizio = mktime(substr($_POST['inizio'], 0, 2), substr($_POST['inizio'], 3, 2));
@@ -223,6 +276,12 @@ class OrarioModel{
         }
     }
 
+    /**
+     * Questa funzione serve per ottenere tutti gli orari
+     * in un certo range
+     * @param inizio l'inizio del range
+     * @param fine la fine del range
+     */
     public function ottieniOrari($inizio, $fine){
         require 'application/libs/connection.php';
         $query = "SELECT inizio, fine
@@ -240,6 +299,10 @@ class OrarioModel{
         return false;
     }
 
+    /**
+     * Questa funzione serve per ottenere tutti i dati
+     * degli orari (id, inizio e fine)
+     */
     public function ottieniOrariCompleti(){
         require 'application/libs/connection.php';
         $query = "SELECT id, inizio, fine
@@ -247,7 +310,29 @@ class OrarioModel{
         $conn->query($query);
         $result = $conn->query($query);
         $data = array();
-        while($data[] = $result->fetch_assoc()){}
+        while($row = $result->fetch_assoc()){
+            $data[] = $row;
+        }
+        return $data;
+    }
+
+    /**
+     * Questa funzione server per ottenere gli orari in uso di un negozio
+     */
+    public function ottieniOrariInUso(){
+        require 'application/libs/connection.php';
+        $query = "SELECT g.nome, o.inizio, o.fine
+                    FROM usa u
+                    INNER JOIN giorno g on g.id = u.giorno_id
+                    INNER JOIN orario o on o.id = u.orario_id
+                    WHERE u.in_uso = 1
+                    AND u.negozio_id = " . $_SESSION['negozio_id'];
+        $conn->query($query);
+        $result = $conn->query($query);
+        $data = array();
+        while($row = $result->fetch_assoc()){
+            $data[] = $row;
+        }
         return $data;
     }
 }

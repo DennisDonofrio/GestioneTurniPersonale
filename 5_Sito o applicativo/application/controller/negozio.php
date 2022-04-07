@@ -2,6 +2,9 @@
 
     class Negozio extends Controller{
 
+        /**
+         * Questa funzione controlla che l'utente sia un datore.
+         */
         function index(){
             if(isset($_SESSION['role'])){
                 if($_SESSION['role'] == 2){
@@ -14,35 +17,29 @@
             }
         }
 
-        /*public function load(){
-            parent::getModel('negozio_model.php');
-            $model = new NegozioModel();
-            if(isset($_POST['aggiungiNegozio'])){
-                $tipi = $model->ottieniTipi();
-                $this->view->render('gestioneNegozi/aggiungiNegozio.php', false, array('tipi' => $tipi));
-            }else if(isset($_POST['rimuoviNegozio'])){
-                $negozi = $model->mostraNegozi();
-                $this->view->render('gestioneNegozi/rimuoviNegozio.php', false, array('negozi' => $negozi));
-            }else if(isset($_POST['modificaNegozio'])){
-                $negozi = $model->ottieniNegozi();
-                $tipi = $model->ottieniTipi();
-                $this->view->render('gestioneNegozi/modificaNegozio.php', false, array('negozi' => $negozi, 'tipi' => $tipi));
-            }else if(isset($_POST['mostraNegozi'])){
-                $this->mostraNegozi();
-            }
-        }*/
-
+        /**
+         * Questa funzione serve per preparare il model
+         * ritorna il model
+         */
         public function prepara(){
             parent::getModel('negozio_model.php');
             return new NegozioModel();
         }
 
+        /**
+         * Questa funzione serve per ottenere i tipi da 
+         * visualizzare in una select per la pagina aggiungi
+         */
         public function aggiungi(){
             $model = $this->prepara();
             $tipi = $model->ottieniTipi();
             $this->view->render('gestioneNegozi/aggiungiNegozio.php', false, array('tipi' => $tipi));
         }
 
+        /**
+         * Questa funzione serve per ottenere i tipi e il negozio da 
+         * visualizzare in una select per la pagina modifica
+         */
         public function modifica(){
             $model = $this->prepara();
             $negozi = $model->ottieniNegozi();
@@ -50,18 +47,28 @@
             $this->view->render('gestioneNegozi/modificaNegozio.php', false, array('negozi' => $negozi, 'tipi' => $tipi));
         }
 
+        /**
+         * Questa funzione serve per ottenere i tipi da 
+         * visualizzare in una select per la pagina rimuovi
+         */
         public function rimuovi(){
             $model = $this->prepara();
             $negozi = $model->mostraNegozi();
             $this->view->render('gestioneNegozi/rimuoviNegozio.php', false, array('negozi' => $negozi));
         }
 
+        /**
+         * Questa funzione serve per mostrare tutti i negozi di un datore
+         */
         public function mostra(){
             $model = $this->prepara();
             $result = $model->mostraNegozi();
             $this->view->render("gestioneNegozi/mostraNegozi.php", false, array('negozi' => $result));
         }
 
+        /**
+         * Questa funzione serve per aggiungere un negozio
+         */
         public function aggiungiNegozio(){
             parent::getModel("negozio_model.php");
             $model = new NegozioModel();
@@ -76,13 +83,9 @@
             }
         }
 
-        /*public function mostraNegozi(){
-            parent::getModel("negozio_model.php");
-            $model = new NegozioModel();
-            $result = $model->mostraNegozi();
-            $this->view->render("gestioneNegozi/mostraNegozi.php", false, array('negozi' => $result));
-        }*/
-
+        /**
+         * Questa funzione serve per eliminare un negozio
+         */
         public function eliminaNegozio(){
             parent::getModel("negozio_model.php");
             $model = new NegozioModel();
@@ -92,6 +95,9 @@
             $this->locate('negozio');
         }
         
+        /**
+         * Questa funzione serve per modificare un negozio
+         */
         public function modificaNegozio(){
             parent::getModel("negozio_model.php");
             $model = new NegozioModel();

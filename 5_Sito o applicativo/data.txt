@@ -30,16 +30,16 @@ insert into orario_turno values('16:00:00', '18:00:00', 1);
 insert into orario_turno values('23:00:00', '07:00:00', 2);
 insert into orario_turno values('18:00:00', '23:00:00', 2);
 
-insert into usa values(1, 1, 1, 1);
-insert into usa values(1, 1, 2, 1);
-insert into usa values(1, 2, 1, 1);
-insert into usa values(1, 2, 2, 1);
-insert into usa values(1, 3, 1, 1);
-insert into usa values(1, 3, 2, 1);
-insert into usa values(1, 4, 1, 1);
-insert into usa values(1, 4, 2, 1);
-insert into usa values(1, 5, 1, 1);
-insert into usa values(1, 5, 2, 1);
+insert into usa values(1, 1, 1, 1, 1);
+insert into usa values(2, 1, 1, 2, 1);
+insert into usa values(3, 1, 2, 1, 1);
+insert into usa values(4, 1, 2, 2, 1);
+insert into usa values(5, 1, 3, 1, 1);
+insert into usa values(6, 1, 3, 2, 1);
+insert into usa values(7, 1, 4, 1, 1);
+insert into usa values(8, 1, 4, 2, 1);
+insert into usa values(9, 1, 5, 1, 1);
+insert into usa values(10, 1, 5, 2, 1);
 
 select o.inizio, o.fine, n.nome, g.nome 
 from orario o 
