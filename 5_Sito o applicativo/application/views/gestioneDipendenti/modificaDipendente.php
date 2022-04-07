@@ -71,7 +71,7 @@
 						<label>Password:</label>
 					</td>
 					<td>
-                        <input type="password" name="password" autocomplete="off">
+                        <input type="password" name="password1" autocomplete="off">
 					</td>
                 </tr>
                 <tr>

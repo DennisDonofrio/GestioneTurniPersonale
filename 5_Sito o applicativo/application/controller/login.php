@@ -16,7 +16,7 @@
 
         /**
          * Questo metodo effettua i controlli sui parametri
-         * passati, ed in caso fossero corretti, effettua il login
+         * passati, ed in caso fossero corretti, effettua il login.
          */
         public function loginUser(){
             require 'application/models/login_model.php';

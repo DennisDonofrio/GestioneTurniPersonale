@@ -9,7 +9,6 @@
         <link rel="stylesheet" href="<?php echo URL; ?>application/public/css/bootstrap/css/bootstrap.css">
         <link rel="stylesheet" href="<?php echo URL; ?>application/public/css/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="<?php echo URL; ?>application/public/css/bootstrap/icons/bootstrap-icons.css">
-        <link href='<?php echo URL; ?>application/public/calendar/lib/main.css' rel='stylesheet'/>
         
         <script src="<?php echo URL; ?>public/js/jquery.js"></script>
 
