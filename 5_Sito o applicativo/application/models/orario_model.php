@@ -201,9 +201,15 @@ class OrarioModel{
                 $data = $this->ottieniOrari($inizio, $fine);
                 if($data == false){
                     require 'application/libs/connection.php';
-                    $query = "INSERT INTO orario(inizio, fine) VALUES('$inizio', '$fine')";
+                    /*$query = "INSERT INTO orario(inizio, fine) VALUES('$inizio', '$fine')";
                     $conn->query($query);
-                    $result = $conn->query($query);
+                    $result = $conn->query($query);*/
+
+                    $sql = $conn->prepare("INSERT INTO orario(inizio, fine) VALUES(?, ?)");
+                    $inizio = AntiCsScript::check($inizio);
+                    $fine = AntiCsScript::check($fine);
+                    $sql->bind_param("ss",$inizio, $fine);
+                    $result = $sql->execute();
                 }else{
                     throw new Exception("Questi orari sono già presenti");
                 }
@@ -228,10 +234,17 @@ class OrarioModel{
                 $data = $this->ottieniOrari($inizio, $fine);
                 if($data == false){
                     require 'application/libs/connection.php';
-                    $query = "UPDATE orario set inizio = '$inizio', fine = '$fine'
+                    /*$query = "UPDATE orario set inizio = '$inizio', fine = '$fine'
                                 WHERE id = ".$_POST['orario'].";";
                     $conn->query($query);
-                    $result = $conn->query($query);
+                    $result = $conn->query($query);*/
+
+                    $sql = $conn->prepare("UPDATE orario set inizio = ?, fine = ? WHERE id = ?;");
+                    $inizio = AntiCsScript::check($inizio);
+                    $fine = AntiCsScript::check($fine);
+                    $orario = AntiCsScript::check($_POST['orario']);
+                    $sql->bind_param("sss",$inizio, $fine, $orario);
+                    $result = $sql->execute();
                 }else{
                     throw new Exception("Questi orari sono già presenti");
                 }
