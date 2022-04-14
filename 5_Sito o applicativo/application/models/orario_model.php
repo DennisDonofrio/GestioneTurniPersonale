@@ -70,6 +70,7 @@ class OrarioModel{
      * @param fine la diata in cui la ricerca finisce
      * @param id id del dipendente
      */
+    //2022-12-12T00.00.0000+02:00
     public function ottieniEventiInRangeDipendente($inizio, $fine, $id){
         require 'application/libs/connection.php';
         $query = $conn->prepare("SELECT d.id, d.nome, o.orario_turno_inizio, o.orario_turno_fine, o.data
