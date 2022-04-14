@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-center pt-4 pb-4">
-	<form action="<?php echo URL ?>gestionedatori/rimuovi" method="POST">
+	<form action="<?php echo URL ?>gestioneDatori/rimuovi" method="POST">
 		<table>
 			<tbody>
             <tr><h2>Elimina datore</h2></tr>

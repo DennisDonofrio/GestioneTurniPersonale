@@ -99,7 +99,7 @@
                 }catch(Exception $e){
                     $this->writeErrorLog("Errore durante la modifica di un dipendete: ".$e->getMessage());
                     $dipendenti = $model->ottieniDipendenti();
-                    $this->view->render('gestioneDipendenti/modificaDipendente.php',  false, array('error' => $e->getMessage()));
+                    $this->view->render('gestioneDipendenti/modificaDipendente.php',  false, array('error' => $e->getMessage(), 'dipendenti' => $dipendenti, 'dipendente' => $model->ottieniDipendente($_POST['dipendente'])));
                 }
             }else if(isset($_POST['riempi'])){
                 $dipendenti = $model->ottieniDipendenti();

@@ -88,7 +88,7 @@
         var endDate = context.dateProfile.currentRange.end
         var req = new XMLHttpRequest();
 
-        req.open("POST", "<?php echo URL; ?>calendario/prova", false);
+        req.open("POST", "<?php echo URL; ?>calendario/salva", true);
         //non riusciva a capire il risultato in json
         req.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
 
@@ -105,7 +105,6 @@
             }
         }
         jsonEvents += "]"
-        console.log(jsonEvents)
 
         var range = JSON.stringify(
             {
@@ -122,17 +121,18 @@
         req.send("data=" + request)
 
         req.onreadystatechange = function() {
+            loading.style.display = "none"
             if (req.readyState === 4){
                 var json = JSON.parse(req.response)
                 if(json.status == "rollback"){
                     calendar.render()
                     window.alert("Non è stato possibile salvare la configurazione, gli orari impostati non sono corretti")
                 }else{
-                    var mailReq = new XMLHttpRequest();
-                    mailReq.open("GET", "<?php echo URL; ?>mail/invia", true);
-                    mailReq.send();
+                    var mailReq = new XMLHttpRequest()
+                    mailReq.open("GET", "<?php echo URL; ?>mail/invia", true)
+                    mailReq.send()
                 }
-                loading.style.display = "none"
+                
             }
         }
 
@@ -152,7 +152,7 @@
   <?php foreach($data['dipendenti'] as $dipendente): ?>
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
         <div class='fc-event-main'>
-            <?php echo $dipendente['nome']; ?>
+            <?php echo "(" . $dipendente['id'] . ") " .  $dipendente['nome']; ?>
         </div>
     </div>
   <?php endforeach; ?>

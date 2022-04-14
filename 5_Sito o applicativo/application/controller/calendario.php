@@ -46,6 +46,22 @@
         }
 
         /**
+         * Questa funzione serve per ottenere tutti gli
+         * eventi in in certo range di un dipendente.
+         * Questo range ed il dipendente vengono specificati nell'url
+         * tramite le variabili start e end
+         */
+        public function ottieniEventiDipendente($id){
+            parent::getModel('orario_model.php');
+            $inizio = $_GET['start'];
+            $fine = $_GET['end'];
+            $model = new OrarioModel();
+            $json = json_encode($model->ottieniEventiInRangeDipendente($inizio, $fine, $id));
+            echo $json;
+            return $json;
+        }
+
+        /**
          * Questa funzione salva gli eventi che cambiano 
          * nel calendario all'interno del database
          */

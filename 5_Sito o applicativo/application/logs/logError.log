@@ -8,3 +8,9 @@
 2022/04/07 12:32:27 user_id=1: Errore nell'aggiunta di un datore: Completare tutti i campi
 2022/04/07 13:13:42 user_id=1: Errore nell'aggiunta di un dipendete: Email già esistente
 2022/04/07 13:14:54 user_id=1: Errore nell'aggiunta di un dipendete: Email già esistente
+2022/04/14 10:04:42 user_id=1: Errore nella modifica di un datore: Email già esistente
+2022/04/14 10:12:04 user_id=1: Errore nell'aggiunta di un dipendete: Email già esistente
+2022/04/14 10:13:21 user_id=1: Errore durante la modifica di un dipendete: Email già esistente
+2022/04/14 10:15:27 user_id=1: Errore durante la modifica di un dipendete: Email già esistente
+2022/04/14 10:15:31 user_id=1: Errore durante la modifica di un dipendete: Completare tutti i campi
+2022/04/14 10:16:06 user_id=1: Errore nell'aggiunta di un dipendete: Email già esistente

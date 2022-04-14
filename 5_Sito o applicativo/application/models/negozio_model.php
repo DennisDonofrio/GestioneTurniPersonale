@@ -58,6 +58,29 @@ class NegozioModel{
         }
         return false;
     }
+    /**
+     * Questa funzione serve per ottenere tutti i negozi
+     * di un dipendente
+     * @param id id del dipendente
+     */
+    public function ottieniNegoziDipendente($id){
+        require 'application/libs/connection.php';
+        $query = "SELECT n.nome, n.id
+                FROM negozio n
+                INNER JOIN turno_lavoro t
+                ON n.id = t.negozio_id
+                WHERE n.archiviato = 0 AND t.dipendente_id = $id
+                group by negozio_id";
+        $result = $conn->query($query);
+        $data = array();
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()){
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return false;
+    }
 
     /**
      * Questa funzione serve per ottenere tutti i negozi
