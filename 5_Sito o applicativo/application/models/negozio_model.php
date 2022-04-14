@@ -113,6 +113,7 @@ class NegozioModel{
     /**
      * Questa funzione serve per ottenere gli orari che l'utente
      * vuole usare
+     * @param input gli orari impostati dall'utente
      */
     public function ottieniOrari($input){
         $orari = array();
@@ -138,6 +139,7 @@ class NegozioModel{
     /**
      * Questa funzione serve per salvare i nuovi orari
      * nella tabella usa
+     * @param conn la connessione con il database
      */
     public function salvaOrari($conn, $orari){
        foreach($orari as $giorno => $orario){
@@ -156,6 +158,7 @@ class NegozioModel{
     /**
      * Questa funzione converte il giorno
      * nel suo id
+     * @param giorno il giorno da convertire
      */
     public function daGiornoAGiornoId($giorno){
         switch($giorno){
@@ -178,6 +181,7 @@ class NegozioModel{
 
     /**
      * Questa funzione comincia una transazione
+     * @param conn la connessione con il database
      */
     public function cominciaTransazione($conn){
         $conn->begin_transaction();
@@ -185,6 +189,7 @@ class NegozioModel{
 
     /**
      * Questa funzione fa il commit di una transazione
+     * @param conn la connessione con il database
      */
     public function commit($conn){
         $conn->commit();
@@ -192,6 +197,7 @@ class NegozioModel{
 
     /**
      * Questa funzione fa il rollback di una transazione
+     * @param conn la connessione con il database
      */
     public function rollback($conn){
         $conn->rollback();
@@ -200,6 +206,7 @@ class NegozioModel{
     /**
      * Questa funzione imposta gli orari che non sono più in uso
      * come archiviati
+     * @param conn la connessione con il database
      */
     public function disattivaOrariNegozio($conn){
         $sql = $conn->prepare("UPDATE usa SET in_uso = 0 WHERE negozio_id = ? AND in_uso = 1");
@@ -215,6 +222,7 @@ class NegozioModel{
     /**
      * Questa funzione salva gli orari che l'utene vuole
      * usare e ritorna uno status
+     * @param input gli orari scelti dall'utente
      */
     public function salva($input){
         require 'application/libs/connection.php';

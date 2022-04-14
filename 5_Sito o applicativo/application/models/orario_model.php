@@ -63,34 +63,9 @@ class OrarioModel{
         return false;
     }
 
-    public function ottieniEventiInRangeDipendente($inizio, $fine, $id){
-        require 'application/libs/connection.php';
-        $query = $conn->prepare("SELECT d.id, d.nome, o.orario_turno_inizio, o.orario_turno_fine, o.data
-        FROM turno_lavoro o 
-        INNER JOIN dipendente d
-        ON d.id = o.dipendente_id
-        WHERE o.negozio_id = ? AND o.data BETWEEN ? AND ? AND o.dipendente_id = ?");
-        $inizio = $this->formattaData($inizio);
-        $fine = $this->formattaData($fine);
-        $query->bind_param("issi", $_SESSION['negozio_id'], $inizio, $fine, $id);
-        $query->execute();
-        $result = $query->get_result();
-        $data = array();
-        if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()){
-                $data[] = array(
-                    'title' => "(" . $row['id'] . ")" . " " . $row['nome'],
-                    'start' => $row['data'] . "T". $row['orario_turno_inizio'],
-                    'end' => $row['data'] . "T" . $row['orario_turno_fine'],
-                );
-            }
-            return $data;
-        }
-        return false;
-    }
-
     /**
      * Questa funzione serve per cominciare una transazione
+     * @param conn la connessione con il database
      */
     public function cominciaTransazione($conn){
         $conn->begin_transaction();
@@ -98,6 +73,7 @@ class OrarioModel{
 
     /**
      * Questa funzione fa il commit di una transazione
+     * @param conn la connessione con il database
      */
     public function commit($conn){
         $conn->commit();
@@ -105,6 +81,7 @@ class OrarioModel{
 
     /**
      * Questa funzione fa il rollback di una transazione
+     * @param conn la connessione con il database
      */
     public function rollback($conn){
         $conn->rollback();
@@ -182,6 +159,7 @@ class OrarioModel{
     /**
      * Questa funzione serve per formattare la data
      * dal formato del calendario
+     * @param data la data da cui tirare fuori gli orari
      */
     public function formattaData($data){
         return substr($data, 0, strpos($data, 'T'));
@@ -190,6 +168,7 @@ class OrarioModel{
     /**
      * Questa funzione serve per formattare un orario
      * dal formato del calendario
+     * @param data la data da cui tirare fuori gli orari
      */
     public function formattaOrario($data){
         $raw = substr($data, strpos($data, 'T') + 1);
@@ -199,6 +178,7 @@ class OrarioModel{
     /**
      * Questa funzione serve per trovare l'id del dipendente 
      * dal titolo dell'evento
+     * @param titolo il titolo da cui ricavare gli id
      */
     public function trovaId($titolo){
         if(strpos($titolo, ')') >= 2){
