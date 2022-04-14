@@ -64,6 +64,39 @@ class OrarioModel{
     }
 
     /**
+     * Questa funzione serve per ottenere gli eventi (turni di lavoro)
+     * in un certo range di un dipendente
+     * @param inizio la data da cui cominciare a cercare
+     * @param fine la diata in cui la ricerca finisce
+     * @param id id del dipendente
+     */
+    public function ottieniEventiInRangeDipendente($inizio, $fine, $id){
+        require 'application/libs/connection.php';
+        $query = $conn->prepare("SELECT d.id, d.nome, o.orario_turno_inizio, o.orario_turno_fine, o.data
+        FROM turno_lavoro o 
+        INNER JOIN dipendente d
+        ON d.id = o.dipendente_id
+        WHERE o.negozio_id = ? AND o.data BETWEEN ? AND ? AND o.dipendente_id = ?");
+        $inizio = $this->formattaData($inizio);
+        $fine = $this->formattaData($fine);
+        $query->bind_param("issi", $_SESSION['negozio_id'], $inizio, $fine, $id);
+        $query->execute();
+        $result = $query->get_result();
+        $data = array();
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()){
+                $data[] = array(
+                    'title' => "(" . $row['id'] . ")" . " " . $row['nome'],
+                    'start' => $row['data'] . "T". $row['orario_turno_inizio'],
+                    'end' => $row['data'] . "T" . $row['orario_turno_fine'],
+                );
+            }
+            return $data;
+        }
+        return false;
+    }
+
+    /**
      * Questa funzione serve per cominciare una transazione
      * @param conn la connessione con il database
      */

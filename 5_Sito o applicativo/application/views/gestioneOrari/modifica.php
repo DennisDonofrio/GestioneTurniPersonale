@@ -11,7 +11,7 @@
                 <td>Orario</td>
                 <td>
                     <select name="orario">
-                        <?php for($i = 0; $i < count($data['orario']) - 1; $i++) : ?>
+                        <?php for($i = 0; $i < count($data['orario']); $i++) : ?>
                             <option value="<?php echo $data['orario'][$i]['id']; ?>"><?php echo substr($data['orario'][$i]['inizio'], 0, 5) . " - " . substr($data['orario'][$i]['fine'], 0, 5); ?></option>
                         <?php endfor; ?>
                     </select>

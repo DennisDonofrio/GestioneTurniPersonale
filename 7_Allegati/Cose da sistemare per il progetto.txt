@@ -5,3 +5,5 @@
 - Nella schermata di mostra dipendenti, se non ci sono deve mostrare "nessun dipendete" e non "nessun negozio"
 
 - Poter attribuire l'orario ad un negozio e modificarlo
+
+- Controllare in ogni controller se chi vuole entrare ha il permesso come utente ed è registrato

@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-center pt-4 pb-4">
-	<form action="<?php echo URL ?>gestionedatori/modifica" method="POST">
+	<form action="<?php echo URL ?>gestioneDatori/modifica" method="POST">
 		<table>
 			<thead>
 				<tr>

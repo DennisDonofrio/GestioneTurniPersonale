@@ -70,7 +70,7 @@
          * Vengono effettuati i dovuti controlli per la validità dei dati
 		 */
         function modificaDatore(){
-            require 'application/libs/Connection.php';
+            require 'application/libs/connection.php';
             if(!empty($_POST['id']) && !empty($_POST['nome']) && !empty($_POST['cognome']) 
             && !empty($_POST['email']) && !empty($_POST['pass1']) 
             && !empty($_POST['pass2']) && !empty($_POST['indirizzo'])){
