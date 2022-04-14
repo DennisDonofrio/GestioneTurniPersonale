@@ -25,8 +25,6 @@
             parent::getModel('orario_model.php');
             $model = new OrarioModel();
             $this->view->render("calendario/index.php", false, array('dipendenti' => $model->ottieniDipendentiDiDatore()));
-            $inizio = new DateTime('2000-01-01');
-            $fine = new DateTime('2030-01-01');
         }
 
         /**
@@ -41,7 +39,6 @@
             $fine = $_GET['end'];
             $model = new OrarioModel();
             $json = json_encode($model->ottieniEventiInRange($inizio, $fine));
-            echo $json;
             return $json;
         }
 

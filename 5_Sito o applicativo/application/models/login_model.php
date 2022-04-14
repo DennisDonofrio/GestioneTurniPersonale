@@ -46,6 +46,7 @@
 						$row = $result->fetch_assoc();
 						$_SESSION['id'] = $row['id'];
 						$_SESSION['role'] = $i;
+						$_SESSION['roleType'] = $this->getRole($i);
 						return true;
 					}
 				}
@@ -54,5 +55,15 @@
 			session_destroy();
 			return false;
 		}
+
+		function getRole($r){
+			if($r == 1){
+				return "dipendente";
+			}else if($r == 2){
+				return "datore";
+			}else if($r == 3){
+				return "amministratore";
+			}
+		} 
 	}
 ?>

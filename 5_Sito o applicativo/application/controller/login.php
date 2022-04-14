@@ -24,7 +24,6 @@
                 $user = new LoginClass($_POST["email"], 
                     $_POST["password"]);
                 if($user->doLogin()){
-                    //$this->writeLog("(Login) logged in");
                     $this->view->locate('home');
                 }else{
                     $this->view->render('login/index.php', false, array('error' => "Email o password non valida"));

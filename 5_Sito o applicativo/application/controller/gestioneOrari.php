@@ -35,9 +35,11 @@
                 $model = new OrarioModel();
                 try{
                     $model->aggiungiOrario();
+                    Log::writeLog("Nuovo orario aggiunto");
                     //$this->view->locate("gestioneOrari/index");
                 }catch(Exception $e){
                     $this->view->error = $e->getMessage();
+                    Log::writeErrorLog("Errore durante l'aggiunta di un orario: ". $e->getMessage());
                 }
             }
             $this->view->render("gestioneOrari/aggiungi.php");
@@ -48,9 +50,11 @@
             $model = new OrarioModel();
             if(isset($_POST['modifica'])){
                 try{
-                    $model->modificaOrario();
+                    $idOrario = $model->modificaOrario();
+                    Log::writeLog("L'orario ".$idOrario." è stato modificato");
                 }catch(Exception $e){
                     $this->view->error = $e->getMessage();
+                    Log::writeErrorLog("Errore durante la modifica di un orario: ". $e->getMessage());
                 }
             }
             $this->view->render("gestioneOrari/modifica.php", false, array('orario' => $model->ottieniOrariCompleti()));
@@ -61,20 +65,5 @@
             $model = new OrarioModel();
             $this->view->render("gestioneOrari/mostra.php", false, array('orario' => $model->ottieniOrariCompleti()));
         }
-/*
-        public function rimuovi(){
-            if(isset($_POST['elimina'])){
-                require 'application/models/datoreModel.php';
-                $model = new DatoreModel();
-                try{
-                    $model->eliminaDatore();
-                }catch(Exception $e){
-                    $this->view->error = $e->getMessage();
-                }
-                $this->view->data = $model->ottieniTuttiDatoriEmail();
-                $this->view->render("gestioneDatori/rimuovi.php");
-            }
-        }
-*/
     }
 ?>

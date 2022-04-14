@@ -56,10 +56,10 @@
             $model = new DipendenteModel();
             try{
                 $em = $model->aggiungiDipendente();
-                $this->writeLog("Nuovo dipendente ".$em." aggiunto");
+                Log::writeLog("Nuovo dipendente ".$em." aggiunto");
                 $this->locate('dipendente');
             }catch(Exception $e){
-                $this->writeErrorLog("Errore nell'aggiunta di un dipendete: ". $e->getMessage());
+                Log::writeErrorLog("Errore nell'aggiunta di un dipendete: ". $e->getMessage());
                 $this->view->render('gestioneDipendenti/aggiungiDipendente.php',  false, array('error' => $e->getMessage()));
             }  
         }
@@ -75,10 +75,10 @@
             $id = $_POST['dipendente'];
             try{
                 $model->rimuoviDipendente($id);
-                $this->writeLog("Dipendente ".$id." eliminato ");
+                Log::writeLog("Dipendente ".$id." eliminato ");
                 $this->locate('dipendente');
             }catch(Exception $e){
-                $this->writeErrorLog("Errore nell'eliminazione di un dipendete: ".$e->getMessage());
+                Log::writeErrorLog("Errore nell'eliminazione di un dipendete: ".$e->getMessage());
                 $this->view->render('gestioneDipendenti/rimuoviDipendente.php',  false, array('error' => $e->getMessage()));
             }
         }
@@ -94,10 +94,10 @@
             if(isset($_POST['modifica'])){
                 try{
                     $em = $model->modificaDipendente();
-                    $this->writeLog("Dipendente ".$em." modificato");
+                    Log::writeLog("Dipendente ".$em." modificato");
                     $this->locate('dipendente');
                 }catch(Exception $e){
-                    $this->writeErrorLog("Errore durante la modifica di un dipendete: ".$e->getMessage());
+                    Log::writeErrorLog("Errore durante la modifica di un dipendete: ".$e->getMessage());
                     $dipendenti = $model->ottieniDipendenti();
                     $this->view->render('gestioneDipendenti/modificaDipendente.php',  false, array('error' => $e->getMessage()));
                 }

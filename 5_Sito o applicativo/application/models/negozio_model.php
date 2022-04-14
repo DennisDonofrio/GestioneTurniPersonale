@@ -8,19 +8,23 @@ class NegozioModel{
      * @param indirizzo l'indirizzo del negozio
      * @param tipo il tipo del negozio 
      */
-    public function aggiungiNegozio($nome, $indirizzo, $tipo){
+    public function aggiungiNegozio(){
         require 'application/libs/connection.php';
-        if(!empty($nome) && !empty($indirizzo) && !empty($tipo)){
+        if(!empty($_POST['nome']) && !empty($_POST['indirizzo']) && !empty($_POST['tipo'])){
             $sql = $conn->prepare("INSERT INTO negozio(nome, indirizzo, archiviato, tipo_id, datore_id) VALUES (?, ?, FALSE, ?, ?)");
-            $nome = AntiCsScript::check($nome);
-            $indirizzo = AntiCsScript::check($indirizzo);
-            $sql->bind_param("ssii", $nome, $indirizzo, AntiCsScript::check($tipo), AntiCsScript::check($_SESSION['id']));
+            $nome = AntiCsScript::check($_POST['nome']);
+            $indirizzo = AntiCsScript::check($_POST['indirizzo']);
+            $tipo = AntiCsScript::check($_POST['tipo']);
+            $sql->bind_param("ssii", $nome, $indirizzo, $tipo, AntiCsScript::check($_SESSION['id']));
             $result = $sql->execute();
             if ($result) {
-                return TRUE;
+                return $nome;
+            }else{
+                throw new Exception("Non è stato possibile aggiungere il negozio ".$nome);
             }
+        }else{
+            throw new Exception("Completare tutti i campi");
         }
-        return FALSE;
     }
 
     /**
@@ -81,12 +85,17 @@ class NegozioModel{
      * Questa funzione per rimuovere un negozio
      * @param id l'id del negozio
      */
-    public function rimuoviNegozio($id){
+    public function rimuoviNegozio(){
         require 'application/libs/connection.php';
         $sql = $conn->prepare("UPDATE negozio SET archiviato=1 WHERE id =?");
-        $sql->bind_param("i", AntiCsScript::check($id));
+        $id = $_POST['negozio'];
+        $sql->bind_param("i", $id);
         $result = $sql->execute();
-        return true;
+        if($result){
+            return $id;
+        }else{
+            throw new Exception("Non è stato possibile eliminare il negozio con id ".$id);
+        }
     }
 
     /**
@@ -96,18 +105,23 @@ class NegozioModel{
      * @param indirizzo il nuovo indirizzo del negozio
      * @param tipo il nuovo tipo del negozio
      */
-    public function modificaNegozio($id, $nome, $indirizzo, $tipo){
+    public function modificaNegozio(){
         require 'application/libs/connection.php';
-        if(!empty($id) && !empty($nome) && !empty($indirizzo) && !empty($tipo)){
-            $nome = AntiCsScript::check($nome);
-            $indirizzo = AntiCsScript::check($indirizzo);
+        if(!empty($_POST['nome']) && !empty($_POST['indirizzo']) && !empty($_POST['tipo']) && !empty($_POST['negozio'])){
+            $nome = AntiCsScript::check($_POST['nome']);
+            $indirizzo = AntiCsScript::check($_POST['indirizzo']);
+            $tipo = AntiCsScript::check($_POST['tipo']);
+            $id = AntiCsScript::check($_POST['negozio']);
             $sql = $conn->prepare("UPDATE negozio SET nome = ?, indirizzo = ?, tipo_id = ? WHERE id = ?");
-            $sql->bind_param("ssii", $nome, $indirizzo, AntiCsScript::check($tipo), AntiCsScript::check($id));
+            $sql->bind_param("ssii", $nome, $indirizzo, $tipo, $id);
             if ($sql->execute()) {
-                return TRUE;
+                return $nome;
+            }else{
+                throw new Exception("Non è stato possibile modificare il negozio ".$nome);
             }
+        }else{
+            throw new Exception("Completare tutti i campi");
         }
-        return FALSE;
     }
 
     /**
@@ -152,6 +166,7 @@ class NegozioModel{
                 }
             }
         }
+        Log::writeLog("Orari del negozio ".$_SESSION['negozio_id']. " aggiornati");
         return true;
     }
 

@@ -72,14 +72,14 @@
         public function aggiungiNegozio(){
             parent::getModel("negozio_model.php");
             $model = new NegozioModel();
-            $nome = $_POST['nome'];
-            $indirizzo = $_POST['indirizzo'];
-            $tipo = $_POST['tipo'];
-            if($model->aggiungiNegozio($nome, $indirizzo, $tipo)){
+            try{
+                $nm = $model->aggiungiNegozio();
+                Log::writeLog("Negozio ".$nm." aggiunto");
                 $this->locate('negozio');
-            }else{
+            }catch(Exception $e){
                 $tipi = $model->ottieniTipi();
-                $this->view->render('gestioneNegozi/aggiungiNegozio.php',  false, array('error' => "Non è stato possibile inserire il negozio", 'tipi' => $tipi));
+                Log::writeErrorLog("Errore nell'aggiunta di un negozio: ".$e->getMessage());
+                $this->view->render('gestioneNegozi/aggiungiNegozio.php', false, array('error' => $e->getMessage(), 'tipi' => $tipi));
             }
         }
 
@@ -89,10 +89,16 @@
         public function eliminaNegozio(){
             parent::getModel("negozio_model.php");
             $model = new NegozioModel();
-            $id = $_POST['negozio'];
-            echo $id;
-            $model->rimuoviNegozio($id);
-            $this->locate('negozio');
+            try{
+                $idNeg = $model->rimuoviNegozio();
+                Log::writeLog("Negozio ".$idNeg." rimosso");
+                $this->locate('negozio');
+            }catch(Exception $e){
+                $tipi = $model->ottieniTipi();
+                Log::writeErrorLog("Errore durante l'eliminazione di un negozio: ".$e->getMessage());
+                $this->view->render('gestioneNegozi/rimuoviNegozio.php', false, array('error' => $e->getMessage(), 'tipi' => $tipi));
+            }
+            
         }
         
         /**
@@ -101,16 +107,15 @@
         public function modificaNegozio(){
             parent::getModel("negozio_model.php");
             $model = new NegozioModel();
-            $nome = $_POST['nome'];
-            $indirizzo = $_POST['indirizzo'];
-            $tipo = $_POST['tipo'];
-            $idNegozio = $_POST['negozio'];
-            if($model->modificaNegozio($idNegozio, $nome, $indirizzo, $tipo)){
+            try{   
+                $nm = $model->modificaNegozio();
+                Log::writeLog("Negozio ".$nm." modificato");
                 $this->locate('negozio');
-            }else{
+            }catch(Exception $e){
                 $tipi = $model->ottieniTipi();
                 $negozi = $model->ottieniNegozi();
-                $this->view->render('gestioneNegozi/modificaNegozio.php', false, array('negozi' => $negozi, 'tipi' => $tipi, 'error' => "Non è stato possibile modificare il negozio"));
+                Log::writeErrorLog("Errore durante la modifica di un negozio: ".$e->getMessage());
+                $this->view->render('gestioneNegozi/modificaNegozio.php', false, array('negozi' => $negozi, 'tipi' => $tipi, 'error' => $e->getMessage()));
             }
         }
 

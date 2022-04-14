@@ -13,22 +13,35 @@
                 $this->view->render('login/index.php');
         }
 
+        /**
+		 * Aggiunge un nuovo tipo se i requisiti sono giusti
+		 */
         public function aggiungiTipo(){
             if(isset($_POST['aggiungi'])){
                 require 'application/models/tipi_model.php';
                 $model = new TipiModel();
                 try{
                     $nm = $model->aggiungi();
-                    $this->writeLog("Tipo ".$em." aggiunto");
-                    $this->view->locate("gestioneDatori/index");
+                    Log::writeLog("Tipo ".$nm." aggiunto");
+                    $this->view->locate("gestioneTipi/index");
                 }catch(Exception $e){
-                    $this->writeErrorLog("Errore nell'aggiunta di un datore: ".$e->getMessage());
-                    $this->view->error = $e->getMessage();
+                    Log::writeErrorLog("Errore nell'aggiunta di un tipo: ".$e->getMessage());
+                    $this->view->render("gestioneTipi/aggiungi.php",  false, array('error' => $e->getMessage()));
                 }
             }else{
                 $this->view->render("gestioneTipi/aggiungi.php");
-            }
-            
+            }            
+        }
+
+        /**
+		 * Mostra tutti i tipi di negozi
+		 */
+        public function mostra(){
+            require 'application/models/tipi_model.php';
+            $model = new TipiModel();
+            $dati = $model->ottieniTipi();
+            $this->view->render("gestioneTipi/mostra.php", false, array('tipi' => $dati));
+           
         }
     }
 ?>

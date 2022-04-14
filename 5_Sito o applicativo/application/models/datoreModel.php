@@ -85,23 +85,24 @@
                 $this->pass2 = AntiCsScript::check($_POST['pass2']);
                 $this->indirizzo = AntiCsScript::check($_POST['indirizzo']);
                 $emailUser = new Email($this->email);
-                if($emailUser->isValid()){
-                    if($this->pass1 == $this->pass2){
-                        $passUser = new Password($this->pass1);
-                        if($passUser->isValid()){
-                            $hp = new Hash($this->pass1);
-                            $hp->doHash($this->email);
-                            $this->hash_password = $hp->getHashed();
-                            $sql = $conn->prepare("UPDATE datore set nome=?, cognome=?, email=?, hash_password=?, indirizzo=? WHERE id=?");
-                            $sql->bind_param("sssssi", $this->nome, $this->cognome, $this->email, $this->hash_password, $this->indirizzo, $this->id);
-                            $result = $sql->execute();
-                            return $this->email;
-                        }else{
-                            throw new Exception("La password deve contenere almeno:<br>- 8 Caratteri<br>-1 Maiuscola<br>-1 Minuscola<br>-1 Cifra<br>-1 Carattere speciale");
-                        }
+                if(!$emailUser->isOldEmail($this->id, TRUE)){
+                    $emailUser->isValid();
+                }
+                if($this->pass1 == $this->pass2){
+                    $passUser = new Password($this->pass1);
+                    if($passUser->isValid()){
+                        $hp = new Hash($this->pass1);
+                        $hp->doHash($this->email);
+                        $this->hash_password = $hp->getHashed();
+                        $sql = $conn->prepare("UPDATE datore set nome=?, cognome=?, email=?, hash_password=?, indirizzo=? WHERE id=?");
+                        $sql->bind_param("sssssi", $this->nome, $this->cognome, $this->email, $this->hash_password, $this->indirizzo, $this->id);
+                        $result = $sql->execute();
+                        return $this->email;
                     }else{
-                        throw new Exception("Le due password non corrispondono");
+                        throw new Exception("La password deve contenere almeno:<br>- 8 Caratteri<br>-1 Maiuscola<br>-1 Minuscola<br>-1 Cifra<br>-1 Carattere speciale");
                     }
+                }else{
+                    throw new Exception("Le due password non corrispondono");
                 }
             }else{
                 throw new Exception("Completare tutti i campi");

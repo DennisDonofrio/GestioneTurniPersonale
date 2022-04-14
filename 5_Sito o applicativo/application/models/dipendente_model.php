@@ -115,24 +115,25 @@ class DipendenteModel{
             $pass1 = AntiCsScript::check($_POST['password1']);
             $pass2 = AntiCsScript::check($_POST['password2']);
             $indirizzo = AntiCsScript::check($_POST['indirizzo']);
-            $emailUser = new Email($email);
-            if($emailUser->isValid()){
-                if($pass1 == $pass2){
-                    $passUser = new Password($pass1);
-                    if($passUser->isValid()){
-                        $hp = new Hash($pass1);
-                        $hp->doHash($email);
-                        $hash_password = $hp->getHashed();
-                        $sql = $conn->prepare("UPDATE dipendente SET nome = ?, cognome = ?, indirizzo = ?, email = ?, hash_password = ?  WHERE archiviato = 0 AND id = ?");
-                        $sql->bind_param("sssssi", $nome, $cognome, $indirizzo, $email, $hash_password, $id);
-                        $result = $sql->execute();
-                        return $email;
-                    }else{
-                        throw new Exception("La password deve contenere almeno:<br>- 8 Caratteri<br>-1 Maiuscola<br>-1 Minuscola<br>-1 Cifra<br>-1 Carattere speciale");
-                    }
+            $emailUser = new Email($this->email);
+            if(!$emailUser->isOldEmail($this->id, TRUE)){
+                $emailUser->isValid();
+            }
+            if($pass1 == $pass2){
+                $passUser = new Password($pass1);
+                if($passUser->isValid()){
+                    $hp = new Hash($pass1);
+                    $hp->doHash($email);
+                    $hash_password = $hp->getHashed();
+                    $sql = $conn->prepare("UPDATE dipendente SET nome = ?, cognome = ?, indirizzo = ?, email = ?, hash_password = ?  WHERE archiviato = 0 AND id = ?");
+                    $sql->bind_param("sssssi", $nome, $cognome, $indirizzo, $email, $hash_password, $id);
+                    $result = $sql->execute();
+                    return $email;
                 }else{
-                    throw new Exception("Le due password non corrispondono");
+                    throw new Exception("La password deve contenere almeno:<br>- 8 Caratteri<br>-1 Maiuscola<br>-1 Minuscola<br>-1 Cifra<br>-1 Carattere speciale");
                 }
+            }else{
+                throw new Exception("Le due password non corrispondono");
             }
         }else{
             throw new Exception("Completare tutti i campi");

@@ -60,10 +60,10 @@
             if(isset($_POST['elimina'])){
                 try{
                     $em = $model->eliminaDatore();
-                    $this->writeLog("Datore ".$em." rimosso");
+                    Log::writeLog("Datore ".$em." rimosso");
                     $this->view->locate("home");
                 }catch(Exception $e){
-                    $this->writeErrorLog("Errore nell'eliminazione di un datore: ".$e->getMessage());
+                    Log::writeErrorLog("Errore nell'eliminazione di un datore: ".$e->getMessage());
                     $this->view->error = $e->getMessage();
                 }
             }
@@ -81,10 +81,10 @@
                 $model = new DatoreModel();
                 try{
                     $em = $model->aggiungiDatore();
-                    $this->writeLog("Datore ".$em." aggiunto");
+                    Log::writeLog("Datore ".$em." aggiunto");
                     $this->view->locate("gestioneDatori/index");
                 }catch(Exception $e){
-                    $this->writeErrorLog("Errore nell'aggiunta di un datore: ".$e->getMessage());
+                    Log::writeErrorLog("Errore nell'aggiunta di un datore: ".$e->getMessage());
                     $this->view->error = $e->getMessage();
                 }
             }

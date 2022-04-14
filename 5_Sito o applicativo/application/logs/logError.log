@@ -8,3 +8,15 @@
 2022/04/07 12:32:27 user_id=1: Errore nell'aggiunta di un datore: Completare tutti i campi
 2022/04/07 13:13:42 user_id=1: Errore nell'aggiunta di un dipendete: Email già esistente
 2022/04/07 13:14:54 user_id=1: Errore nell'aggiunta di un dipendete: Email già esistente
+2022/04/14 08:29:20 user_id=1: Errore nella modifica di un datore: Completare tutti i campi
+2022/04/14 09:08:08 user_id=1: Errore nella modifica di un datore: Email già esistente
+2022/04/14 09:08:22 user_id=1: Errore nella modifica di un datore: Email già esistente
+2022/04/14 09:36:01 user_id=1: Errore nell'aggiunta di un datore: Email già esistente
+2022/04/14 09:48:38 user_id=1: Errore nell'aggiunta di un tipo: Completare tutti i campi
+2022/04/14 09:48:53 user_id=1: Errore nell'aggiunta di un tipo: Completare tutti i campi
+2022/04/14 10:17:42 user_id=1: Errore nell'aggiunta di un tipo: Completare tutti i campi
+2022/04/14 10:17:44 user_id=1: Errore nell'aggiunta di un tipo: Completare tutti i campi
+2022/04/14 11:58:59 user_id=1: Errore durante l'aggiunta di un orario: Questi orari sono già presenti
+2022/04/14 13:17:58 user_id=1: Errore nell'aggiunta di un negozio: Completare tutti i campi
+2022/04/14 13:26:57 user_id=1: Errore durante la modifica di un negozio: Completare tutti i campi
+2022/04/14 13:38:13 role=datore, user_id=1: Errore durante l'eliminazione di un negozio: Non è stato possibile eliminare il negozio con id 

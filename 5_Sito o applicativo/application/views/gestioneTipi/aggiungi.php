@@ -26,7 +26,7 @@
                 <tr>
 					<td colspan="2" style="text-align:center">
 					<br>
-						<input type="submit" class="btn btn-dark" value="Aggiungi">
+						<input type="submit" class="btn btn-dark" name="aggiungi" value="Aggiungi">
 					</td>
 				</tr>
 			</tbody>
