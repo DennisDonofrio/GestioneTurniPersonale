@@ -51,8 +51,10 @@ class Statistiche extends Controller{
                 }
 
                 $fin = $this->settimanaInFerialiFestivi($dipOre);
+                Log::writeLog("Pagina statistiche creata con successo");
                 $this->view->render('statistiche/statistiche.php', false, array('dati' => $fin));
             }else{
+                Log::writeErrorLog("Errore durante l'inserimento delle date delle statistiche");
                 $this->view->error = "Completare tutti i campi";
                 $this->index();
             }
