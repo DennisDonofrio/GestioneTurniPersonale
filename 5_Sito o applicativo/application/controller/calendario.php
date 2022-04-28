@@ -48,7 +48,7 @@
                 $fine = $_GET['end'];
                 $model = new OrarioModel();
                 $json = json_encode($model->ottieniEventiInRange($inizio, $fine));
-                return $json;
+                echo $json;
             }else{
                 $this->view->render('login/index.php');
             }

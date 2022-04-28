@@ -15,4 +15,7 @@
             <td colspan="2" style="text-align: center;"><input type="submit" name="calcola" value="Calcola" class="btn btn-dark btn-lg" style="margin: auto; margin-right:auto;"></td>
         </tr>
     </table>
+    <?php if(isset($this->error)) : ?>
+	    <h2 id="errorModifyComponent" style="text-align: center" class="alert alert-danger"> <?php echo $this->error ?></h2>
+    <?php endif; ?>
 </form>

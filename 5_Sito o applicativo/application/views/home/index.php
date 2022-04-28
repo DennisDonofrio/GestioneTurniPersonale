@@ -2,7 +2,7 @@
    <h1>Benvenuto dipendente [nome]</h1>
        
 <?php elseif($_SESSION['role'] == 2): ?>
-   <h1>Benvenuto datore [nome]</h1>
+   <h1>Benvenuto datore <?php require 'application/models/login_model.php'; echo LoginClass::ottieniNome(); ?></h1>
    <table style="margin: auto; margin-right:auto; margin-top:3em;">
         <tr>
             <div>
@@ -25,7 +25,7 @@
         </tr>
       </table>
 <?php elseif($_SESSION['role'] == 3): ?>
-   <h1>Benvenuto admin [nome]</h1>
+   <h1>Benvenuto admin <?php require 'application/models/login_model.php'; echo LoginClass::ottieniNome(); ?></h1>
     <table style="margin: auto; margin-right:auto; margin-top:3em;">
         <tr>
             <div>
