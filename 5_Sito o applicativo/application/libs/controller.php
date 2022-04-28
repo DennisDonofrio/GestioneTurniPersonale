@@ -24,4 +24,18 @@ class Controller{
     public function locate($path){
 		header("Location: " . URL . $path);
 	}
+
+    /**
+     * Verifica se l'utente è loggato. 
+     * Torna 1 se è un dipendente
+     * Torna 2 se è un datore
+     * Torna 3 se è un amministratore
+     */
+    public function isLogged(){
+        if(!empty($_SESSION['id'])){
+            return $_SESSION['role'];
+        }else{
+            return -1;
+        }
+    }
 }
