@@ -67,7 +67,7 @@
                 $fine = $_GET['end'];
                 $model = new OrarioModel();
                 $json = json_encode($model->ottieniEventiInRangeDipendente($inizio, $fine, $id));
-                return $json;
+                echo $json;
             }else{
                 $this->view->render('login/index.php');
             }
