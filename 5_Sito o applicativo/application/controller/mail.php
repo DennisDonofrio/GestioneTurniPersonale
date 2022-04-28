@@ -10,7 +10,6 @@ class Mail extends Controller{
         parent::getModel('email_model.php');
         $model = new EmailModel();
         $model->inviaEmailANegozio();
-        echo "Email inviate";
     }
 
     /**

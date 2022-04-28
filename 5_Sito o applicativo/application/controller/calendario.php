@@ -9,9 +9,13 @@
          * l'orario
          */
         public function index(){
-            parent::getModel('negozio_model.php');
-            $model = new NegozioModel();
-            $this->view->render('calendario/negozio.php', false, array('negozi' => $model->ottieniNegozi()));
+            if($this->isLogged() == 2){
+                parent::getModel('negozio_model.php');
+                $model = new NegozioModel();
+                $this->view->render('calendario/negozio.php', false, array('negozi' => $model->ottieniNegozi()));
+            }else{
+                $this->view->render('login/index.php');
+            }
         }
 
         /**
@@ -21,10 +25,14 @@
          * nella pagina del calendario
          */
         public function impostaNegozio(){
-            $_SESSION['negozio_id'] = $_POST['negozio'];
-            parent::getModel('orario_model.php');
-            $model = new OrarioModel();
-            $this->view->render("calendario/index.php", false, array('dipendenti' => $model->ottieniDipendentiDiDatore()));
+            if($this->isLogged() == 2){
+                $_SESSION['negozio_id'] = $_POST['negozio'];
+                parent::getModel('orario_model.php');
+                $model = new OrarioModel();
+                $this->view->render("calendario/index.php", false, array('dipendenti' => $model->ottieniDipendentiDiDatore()));
+            }else{
+                $this->view->render('login/index.php');
+            }
         }
 
         /**
@@ -34,28 +42,35 @@
          * tramite le variabili start e end
          */
         public function ottieniEventi(){
-            parent::getModel('orario_model.php');
-            $inizio = $_GET['start'];
-            $fine = $_GET['end'];
-            $model = new OrarioModel();
-            $json = json_encode($model->ottieniEventiInRange($inizio, $fine));
-            return $json;
+            if($this->isLogged() == 1 || $this->isLogged() == 2){
+                parent::getModel('orario_model.php');
+                $inizio = $_GET['start'];
+                $fine = $_GET['end'];
+                $model = new OrarioModel();
+                $json = json_encode($model->ottieniEventiInRange($inizio, $fine));
+                return $json;
+            }else{
+                $this->view->render('login/index.php');
+            }
         }
 
         /**
          * Questa funzione serve per ottenere tutti gli
-         * eventi in in certo range di un dipendente.
+         * eventi in un certo range di un dipendente.
          * Questo range ed il dipendente vengono specificati nell'url
          * tramite le variabili start e end
          */
         public function ottieniEventiDipendente($id){
-            parent::getModel('orario_model.php');
-            $inizio = $_GET['start'];
-            $fine = $_GET['end'];
-            $model = new OrarioModel();
-            $json = json_encode($model->ottieniEventiInRangeDipendente($inizio, $fine, $id));
-            echo $json;
-            return $json;
+            if($this->isLogged() == 1 || $this->isLogged() == 2){
+                parent::getModel('orario_model.php');
+                $inizio = $_GET['start'];
+                $fine = $_GET['end'];
+                $model = new OrarioModel();
+                $json = json_encode($model->ottieniEventiInRangeDipendente($inizio, $fine, $id));
+                return $json;
+            }else{
+                $this->view->render('login/index.php');
+            }
         }
 
         /**
@@ -63,15 +78,16 @@
          * nel calendario all'interno del database
          */
         public function salva(){
-            $data = json_decode($_POST['data'], true);
-            
-            $range = json_decode($data['range'], true);
-            $events = json_decode($data['events'], true);
-            parent::getModel('orario_model.php');
-            $model = new OrarioModel();
-            echo json_encode(array("status" => $model->salva($range, $events)));
+            if($this->isLogged() == 2){
+                $data = json_decode($_POST['data'], true);
+                $range = json_decode($data['range'], true);
+                $events = json_decode($data['events'], true);
+                parent::getModel('orario_model.php');
+                $model = new OrarioModel();
+            }else{
+                $this->view->render('login/index.php');
+            }
         }
-
     }
 
 ?>

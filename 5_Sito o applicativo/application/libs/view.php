@@ -15,7 +15,6 @@ class View
      * @param Array $data -> le variabili da passare alla view da caricare
      * usage:  $this->view->render('<view>'[,<include>, array('<key>' => <value>)]);
      */
-    
     public function render($name, $onlyIncludeBody = false, $data = array()){
         if($onlyIncludeBody){
             require "application/views/" . $name;
@@ -27,7 +26,7 @@ class View
     }
 	
     /**
-     * Permette di cercate un file alla path passata
+     * Permette di cercare un file alla path passata
      * 
      * @param String $path -> percorso del file da trovare
      */

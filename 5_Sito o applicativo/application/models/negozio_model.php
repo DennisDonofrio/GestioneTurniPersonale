@@ -248,11 +248,11 @@ class NegozioModel{
      */
     public function disattivaOrariNegozio($conn){
         $sql = $conn->prepare("UPDATE usa SET in_uso = 0 WHERE negozio_id = ? AND in_uso = 1");
-        echo "ciao<br>";
+        //echo "ciao<br>";
         if($sql){
             $sql->bind_param("i", $_SESSION['negozio_id']);
             $sql->execute();
-            echo "ok<br>";
+            //echo "ok<br>";
             return true;
         }
     }
