@@ -1,8 +1,18 @@
 <?php if($_SESSION['role'] == 1): ?>
-   <h1>Benvenuto dipendente [nome]</h1>
+   <h1>Benvenuto dipendente <?php require 'application/models/login_model.php'; echo LoginClass::ottieniNome(); ?></h1>
        
+   <table style="margin: auto; margin-right:auto; margin-top:3em;">
+        <tr>
+            <div>
+                <td>
+                    <input type="button" class="btn btn-dark btn-lg" style="height: 5em; width: 10em" onclick="window.location.href='<?php echo URL; ?>home/negozio'" value="Scegli negozio">
+                </td>
+            </div>
+        </tr>
+    </table>
+
 <?php elseif($_SESSION['role'] == 2): ?>
-   <h1>Benvenuto datore [nome]</h1>
+   <h1>Benvenuto datore <?php require 'application/models/login_model.php'; echo LoginClass::ottieniNome(); ?></h1>
    <table style="margin: auto; margin-right:auto; margin-top:3em;">
         <tr>
             <div>
@@ -25,15 +35,12 @@
         </tr>
       </table>
 <?php elseif($_SESSION['role'] == 3): ?>
-   <h1>Benvenuto admin [nome]</h1>
+   <h1>Benvenuto admin <?php require 'application/models/login_model.php'; echo LoginClass::ottieniNome(); ?></h1>
     <table style="margin: auto; margin-right:auto; margin-top:3em;">
         <tr>
             <div>
                 <td>
                     <input type="button" class="btn btn-dark btn-lg" style="height: 5em; width: 10em" onclick="window.location.href='<?php echo URL; ?>gestioneDatori'" value="Gestione Datori">
-                </td>
-                <td>
-                    <input type="button" class="btn btn-dark btn-lg" style="height: 5em; width: 10em" onclick="window.location.href='<?php echo URL; ?>gestioneTipi'" value="Gestione Tipi">
                 </td>
             </div>
         </tr>
