@@ -46,7 +46,6 @@
 						$row = $result->fetch_assoc();
 						$_SESSION['id'] = $row['id'];
 						$_SESSION['role'] = $i;
-						$_SESSION['roleType'] = $this->getRole($i);
 						return true;
 					}
 				}
@@ -56,14 +55,32 @@
 			return false;
 		}
 
-		function getRole($r){
-			if($r == 1){
-				return "dipendente";
-			}else if($r == 2){
-				return "datore";
-			}else if($r == 3){
-				return "amministratore";
+		/**
+		 * Questa funzione ritorna il nome dell'utente che
+		 * e' loggato in quel momento.
+		 * @return out contiene il nome dell'utente loggato
+		 */
+		public static function ottieniNome(){
+			if(isset($_SESSION['id']) && isset($_SESSION['role'])){
+				require 'application/libs/connection.php';
+				switch ($_SESSION['role']) {
+					case 1:
+						$sql = $conn->prepare("SELECT nome FROM dipendente WHERE id=? AND archiviato=0");
+						break;
+					case 2:
+						$sql = $conn->prepare("SELECT nome FROM datore WHERE id=? AND archiviato=0");
+						break;
+					case 3:
+						$sql = $conn->prepare("SELECT nome FROM amministratore WHERE id=? AND in_uso=1");
+						break;
+				}
+				$sql->bind_param("i", $_SESSION['id']);
+				$sql->execute();
+				$out = $sql->get_result()->fetch_assoc()['nome'];
+			}else{
+				$out = "[nome]";
 			}
-		} 
+			return $out;
+		}
 	}
 ?>
