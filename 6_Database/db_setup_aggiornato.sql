@@ -77,9 +77,12 @@ CREATE TABLE orario_turno(
     inizio TIME,
     fine TIME,
 	negozio_id INT,
+	giorno_id INT,
+	FOREIGN KEY (giorno_id) REFERENCES giorno(id)
+    ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (negozio_id) REFERENCES negozio(id)
     ON UPDATE CASCADE ON DELETE CASCADE,
-    PRIMARY KEY (inizio, fine, negozio_id)
+    PRIMARY KEY (inizio, fine, negozio_id, giorno_id)
 );
 
 DROP TABLE IF EXISTS usa;
