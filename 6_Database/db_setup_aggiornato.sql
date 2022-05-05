@@ -96,7 +96,7 @@ CREATE TABLE usa(
     ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (orario_id) REFERENCES orario(id)
     ON UPDATE NO ACTION ON DELETE NO ACTION,
-    PRIMARY KEY (negozio_id, giorno_id, orario_id)
+    PRIMARY KEY (negozio_id, giorno_id, orario_id, in_uso)
 );
 
 DROP TABLE IF EXISTS turno_lavoro;
