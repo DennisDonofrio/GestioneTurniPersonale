@@ -192,8 +192,7 @@
             if($this->isLogged() == 2){
                 parent::getModel('negozio_model.php');
                 $model = new NegozioModel();
-                $orari = $model->ottieniOrari($_POST);
-                $model->salva($_POST);
+                $s = $model->salva($_POST);
                 $this->locate('negozio');
             }else{
                 $this->view->render('login/index.php');

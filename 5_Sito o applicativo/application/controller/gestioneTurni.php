@@ -32,16 +32,22 @@
             }
             parent::getModel("turno_model.php");
             $model = new TurnoModel();
-            if(isset($_POST['modifica'])){
+            if(isset($_POST['elimina'])){
                 try{
-                    $model->eliminaTurno();
-                    Log::writeLog("Eliminazione di un turno");
+                    if($model->eliminaTurno()){
+                        Log::writeLog("Eliminazione di un turno");
+                        $this->view->render("home/index.php");
+                    }else{
+                        Log::writeErrorLog("Errore nell'eliminazione di un turno");
+                        $this->view->render("gestioneTurni/elimina.php", false, array("turni" => $model->ottieniTurni(), "error" => "Non è possibile cancellare un turno in utilizzo"));
+                    }
                 }catch(Exception $e){
                     $this->view->error = $e->getMessage();
                     Log::writeLog($e->getMessage());
                 }
+            }else{
+                $this->view->render("gestioneTurni/elimina.php", false, array("turni" => $model->ottieniTurni()));
             }
-            $this->view->render("gestioneTurni/elimina.php", false, array("turni" => $model->ottieniTurni()));
         }
 
         /**

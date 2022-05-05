@@ -27,6 +27,9 @@ class Pianifica extends Controller{
             parent::locate("/");
         }else{
             Log::writeErrorLog("Errori! $result");
+			parent::getModel('negozio_model.php');
+			$model = new NegozioModel();
+			$this->view->render("pianifica/index.php", false, array("errore" => $result, "negozi" => $model->ottieniNegozi()));
         }
     }
 
