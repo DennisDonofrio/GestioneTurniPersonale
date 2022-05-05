@@ -7,3 +7,5 @@ git add .
 git commit -m "Messaggio importante"
 
 git push
+
+Come calcolare la versione del sito: 4.0 -> 4 merge e 0 bug fix
