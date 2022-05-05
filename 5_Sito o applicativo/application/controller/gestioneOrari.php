@@ -1,6 +1,9 @@
 <?php
     class GestioneOrari extends Controller
     {
+		/**
+         * Carica la pagina index per la gestione degli orari
+         */
         public function index()
         {
             if($this->isLogged() == 2){
@@ -10,6 +13,10 @@
             }
         }
 
+		/**
+         * Questo metodo serve caricare la pagina corretta, ovvero in base al bottone schiacciato,
+		 * apre la pagina corretta
+         */
         public function action(){
             if($this->isLogged() == 2){
                 if(isset($_POST['aggiungi'])){
@@ -36,6 +43,10 @@
             }
         }
 
+		/**
+         * Questo metodo viene invocato per aggiungere un orario di lavoro.
+         * Se tutti i controlli vanno a buon fine, richiama il metodo del model per aggiungere un nuovo orario
+         */
         public function aggiungi(){
             if($this->isLogged() == 2){
                 if(isset($_POST['aggiungi'])){
@@ -56,6 +67,10 @@
             }
         }
 
+		/**
+         * Questo metodo viene invocato per modificare un orario di lavoro.
+         * Se tutti i controlli vanno a buon fine, richiama il metodo del model per modificare le informazioni dell'orario
+         */
         public function modifica(){
             if($this->isLogged() == 2){
                 require 'application/models/orario_model.php';
@@ -75,6 +90,9 @@
             }
         }
 
+		/**
+         * Questo metodo serve per mostrare la lista degli orari
+         */
         public function mostra(){
             if($this->isLogged() == 2){
                 require 'application/models/orario_model.php';
