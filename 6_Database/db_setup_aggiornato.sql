@@ -96,7 +96,7 @@ CREATE TABLE usa(
     FOREIGN KEY (giorno_id) REFERENCES giorno(id)
     ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (orario_id) REFERENCES orario(id)
-    ON UPDATE CASCADE ON DELETE CASCADE,
+    ON UPDATE NO ACTION ON DELETE NO ACTION,
     PRIMARY KEY (negozio_id, giorno_id, orario_id)
 );
 
@@ -113,6 +113,6 @@ CREATE TABLE turno_lavoro(
     ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (orario_turno_inizio, orario_turno_fine) 
     REFERENCES orario_turno(inizio, fine)
-    ON UPDATE CASCADE ON DELETE CASCADE,
+    ON UPDATE NO ACTION ON DELETE NO ACTION,
     PRIMARY KEY (dipendente_id, negozio_id, orario_turno_inizio, orario_turno_fine, data)
 );
