@@ -51,7 +51,7 @@ class NegozioModel{
      */
     public function ottieniNegozi(){
         require 'application/libs/connection.php';
-        $query = "SELECT nome, id FROM negozio WHERE archiviato = 0";
+        $query = "SELECT nome, id FROM negozio WHERE archiviato = 0 AND datore_id = " . $_SESSION['id'];
         $result = $conn->query($query);
         $data = array();
         if ($result->num_rows > 0) {
@@ -181,6 +181,7 @@ class NegozioModel{
     public function salvaOrari($conn, $orari){
        foreach($orari as $giorno => $orario){
            $giornoId = $this->daGiornoAGiornoId($giorno);
+           echo $giornoId."<br>";
            foreach($orario as $orarioId){
                 $sql = $conn->prepare("INSERT INTO usa(negozio_id, giorno_id, orario_id, in_uso) VALUES(?, ?, ?, 1)");
                 $sql->bind_param("iii", $_SESSION['negozio_id'], $giornoId, $orarioId);
@@ -248,11 +249,10 @@ class NegozioModel{
      */
     public function disattivaOrariNegozio($conn){
         $sql = $conn->prepare("UPDATE usa SET in_uso = 0 WHERE negozio_id = ? AND in_uso = 1");
-        //echo "ciao<br>";
         if($sql){
             $sql->bind_param("i", $_SESSION['negozio_id']);
+            echo "disattivati<br>";
             $sql->execute();
-            //echo "ok<br>";
             return true;
         }
     }
@@ -268,6 +268,7 @@ class NegozioModel{
         mysqli_autocommit($conn, false);
         $this->cominciaTransazione($conn);
         $this->disattivaOrariNegozio($conn);
+        $this->commit($conn);
         if($this->salvaOrari($conn, $orari)){
             $this->commit($conn);
             mysqli_autocommit($conn, true);

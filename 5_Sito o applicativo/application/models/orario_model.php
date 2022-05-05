@@ -17,7 +17,7 @@ class OrarioModel{
      */
     function ottieniDipendentiDiDatore(){
         require 'application/libs/connection.php';
-        $query = $conn->prepare("SELECT nome, id FROM dipendente WHERE datore_id = ?");
+        $query = $conn->prepare("SELECT nome, id FROM dipendente WHERE datore_id = ? AND archiviato = 0");
         $query->bind_param("i", $_SESSION['id']);
         $query->execute();
         $result = $query->get_result();
@@ -240,7 +240,6 @@ class OrarioModel{
                     require 'application/libs/connection.php';
                     $query = "INSERT INTO orario(inizio, fine) VALUES('$inizio', '$fine')";
                     $conn->query($query);
-                    $result = $conn->query($query);
                 }else{
                     throw new Exception("Questi orari sono già presenti");
                 }

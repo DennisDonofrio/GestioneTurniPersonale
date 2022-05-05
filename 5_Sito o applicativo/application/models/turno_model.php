@@ -41,8 +41,11 @@ class TurnoModel{
         $sql = $conn->prepare("DELETE FROM orario_turno
         WHERE inizio = ? AND fine = ? AND negozio_id = ? AND giorno_id = ?");
         $sql->bind_param("ssii", $riga['inizio'], $riga['fine'], $riga['negozio_id'], $riga['giorno_id']);
-        $sql->execute();
-        return true;
+        if($sql->execute()){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /**
@@ -159,9 +162,10 @@ class TurnoModel{
     public function ottieniDatiTurno($riga){
         require 'application/libs/connection.php';
         $sql = $conn->prepare("SELECT * FROM orario_turno
+        WHERE negozio_id = ?
         LIMIT ?, 1");
-        $riga = AntiCsScript::check($riga + 1);
-        $sql->bind_param("i", $riga);
+        $riga = AntiCsScript::check($riga);
+        $sql->bind_param("ii", $_SESSION['negozio_id'], $riga);
         $sql->execute();
         $result = $sql->get_result();
         if ($result->num_rows > 0) {

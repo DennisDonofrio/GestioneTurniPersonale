@@ -46,6 +46,7 @@
 						$row = $result->fetch_assoc();
 						$_SESSION['id'] = $row['id'];
 						$_SESSION['role'] = $i;
+						$_SESSION['roleType'] = $this->getRole($i);
 						return true;
 					}
 				}
@@ -71,7 +72,7 @@
 						$sql = $conn->prepare("SELECT nome FROM datore WHERE id=? AND archiviato=0");
 						break;
 					case 3:
-						$sql = $conn->prepare("SELECT nome FROM amministratore WHERE id=? AND in_uso=1");
+						$sql = $conn->prepare("SELECT nome FROM amministratore WHERE id=?");
 						break;
 				}
 				$sql->bind_param("i", $_SESSION['id']);
@@ -82,5 +83,19 @@
 			}
 			return $out;
 		}
+
+		/**
+		 * Questa funzione torna il nome del ruolo in base al suo id.
+		 * @param Int $r -> id del ruolo
+		 */
+		function getRole($r){
+			if($r == 1){
+				return "dipendente";
+			}else if($r == 2){
+				return "datore";
+			}else if($r == 3){
+				return "amministratore";
+			}
+		} 
 	}
 ?>

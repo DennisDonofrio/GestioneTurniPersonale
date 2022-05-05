@@ -15,7 +15,7 @@ class PianificaModel{
         try{
             $this->cominciaTransazione($conn);
             $dipendenti = $this->ottieniDipendenti();
-            if(count($dipendenti) >= 2){
+            if(!empty($dipendenti) && count($dipendenti) >= 2){
                 $this->inserisciDipendenti($negozio, $dipendenti, $inizio, $fine, $conn);
                 $this->commit($conn);
                 return true;
@@ -55,7 +55,7 @@ class PianificaModel{
      */
     public function ottieniDipendenti(){
         require 'application/libs/connection.php';
-        $query = $conn->prepare("SELECT id FROM dipendente WHERE datore_id = ?");
+        $query = $conn->prepare("SELECT id FROM dipendente WHERE datore_id = ? AND archiviato = 0");
         $query->bind_param("i", $_SESSION['id']);
         $query->execute();
         $result = $query->get_result();
@@ -91,24 +91,26 @@ class PianificaModel{
                 foreach($orari as $orario){
                     $done = false;
                     while(!$done){
-                        $dipendente = $dipendenti[$counterDipendenti];
-                        $orariLavoroDipendente = $this->ottieniOrariLavoroDipendente($dipendente['id'], $data);
-                        if(!$orariLavoroDipendente){
-                            $this->inserisciDipendente($dipendente['id'], $orario, $data, $negozio, $conn);
-                            $done = true; 
-                        }else{
-                            foreach($orariLavoroDipendente as $orarioLavoro){
-                                if($this->dipendenteLibero($orario['inizio'], $orario['fine'], $orarioLavoro['turno_inizio'], $orarioLavoro['turno_fine'])){
-                                    $this->inserisciDipendente($dipendente['id'], $orario, $data, $negozio, $conn);
-                                    $done = true;
-                                    break;
+                        for($i=0;$i<2;$i++){
+                            $dipendente = $dipendenti[$counterDipendenti];
+                            $orariLavoroDipendente = $this->ottieniOrariLavoroDipendente($dipendente['id'], $data);
+                            if(!$orariLavoroDipendente){
+                                $this->inserisciDipendente($dipendente['id'], $orario, $data, $negozio, $conn);
+                                $done = true; 
+                            }else{
+                                foreach($orariLavoroDipendente as $orarioLavoro){
+                                    if($this->dipendenteLibero($orario['inizio'], $orario['fine'], $orarioLavoro['turno_inizio'], $orarioLavoro['turno_fine'])){
+                                        $this->inserisciDipendente($dipendente['id'], $orario, $data, $negozio, $conn);
+                                        $done = true;
+                                        break;
+                                    }
+                                }
+                                if($counterDipendenti == count($dipendenti) - 1){
+                                    throw new Exception("Tutti i dipendenti sono occupati durante l'orario " . $orario['inizio'] . "-" . $orario['fine'] . "!");
                                 }
                             }
-                            if($counterDipendenti == count($dipendenti) - 1){
-                                throw new Exception("Tutti i dipendenti sono occupati durante l'orario " . $orario['inizio'] . "-" . $orario['fine'] . "!");
-                            }
+                            $counterDipendenti = ($counterDipendenti + 1) % count($dipendenti);
                         }
-                        $counterDipendenti = ($counterDipendenti + 1) % count($dipendenti);
                     }
                 }
             }
@@ -126,7 +128,6 @@ class PianificaModel{
      * @param conn la connessione con il database
      */
     public function inserisciDipendente($id, $orario, $data, $negozio, $conn){
-        echo "inserisco dipendente " . $id . " in orario " . $orario['inizio'] . "-" . $orario['fine'] . "<br>";
         $query = $conn->prepare("INSERT INTO turno_lavoro VALUES(?, ?, ?, ?, ?)");
         $query->bind_param("iisss", $id, $negozio, $orario['inizio'], $orario['fine'], $data);
         $query->execute();
