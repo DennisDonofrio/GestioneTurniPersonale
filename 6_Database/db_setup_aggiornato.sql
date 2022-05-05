@@ -73,7 +73,7 @@ CREATE TABLE negozio(
 
 DROP TABLE IF EXISTS orario_turno;
 CREATE TABLE orario_turno(
-    id INT PIRMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     inizio TIME,
     fine TIME,
 	negozio_id INT,
