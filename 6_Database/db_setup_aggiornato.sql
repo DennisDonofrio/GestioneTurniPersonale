@@ -9,8 +9,7 @@ CREATE TABLE amministratore(
     cognome VARCHAR(50),
     email VARCHAR(50),
     hash_password VARCHAR(80),
-    indirizzo VARCHAR(50),
-    archiviato TINYINT(1)
+    indirizzo VARCHAR(50)
 );
 
 DROP TABLE IF EXISTS datore;
@@ -78,15 +77,17 @@ CREATE TABLE orario_turno(
     fine TIME,
 	negozio_id INT,
 	giorno_id INT,
+	in_uso INT,
 	FOREIGN KEY (giorno_id) REFERENCES giorno(id)
     ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (negozio_id) REFERENCES negozio(id)
     ON UPDATE CASCADE ON DELETE CASCADE,
-    PRIMARY KEY (inizio, fine, negozio_id, giorno_id)
+    PRIMARY KEY(inizio, fine, negozio_id, giorno_id, in_uso)
 );
 
 DROP TABLE IF EXISTS usa;
 CREATE TABLE usa(
+    id INT PRIMARY KEY AUTO_INCREMENT,
     negozio_id INT,
     giorno_id INT,
     orario_id INT,
@@ -96,8 +97,7 @@ CREATE TABLE usa(
     FOREIGN KEY (giorno_id) REFERENCES giorno(id)
     ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (orario_id) REFERENCES orario(id)
-    ON UPDATE CASCADE ON DELETE CASCADE,
-    PRIMARY KEY (negozio_id, giorno_id, orario_id)
+    ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
 DROP TABLE IF EXISTS turno_lavoro;
@@ -113,6 +113,61 @@ CREATE TABLE turno_lavoro(
     ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (orario_turno_inizio, orario_turno_fine) 
     REFERENCES orario_turno(inizio, fine)
-    ON UPDATE CASCADE ON DELETE CASCADE,
+    ON UPDATE NO ACTION ON DELETE NO ACTION,
     PRIMARY KEY (dipendente_id, negozio_id, orario_turno_inizio, orario_turno_fine, data)
 );
+
+drop procedure if exists controlloDuplicati;
+delimiter //
+CREATE PROCEDURE controlloDuplicati()
+BEGIN
+	declare orarioId int;
+	declare giornoId int;
+    declare negozioId int;
+	declare inUso int;
+	declare righe int;
+	declare righeDaEliminare int;
+	declare finito int default 0;
+    declare c cursor for select count(1), orario_id, giorno_id, negozio_id from usa group by orario_id, giorno_id, negozio_id;
+	declare continue handler for sqlstate '02000' set finito = 1;
+	open c;
+	fetch c into righe, orarioId, giornoId, negozioId;
+	while not finito do
+		if righe > 1 then
+		set righeDaEliminare = righe - 1;
+		delete from usa where orario_id = orarioId and giorno_id = giornoId and negozio_id = negozioId;
+        insert into usa(orario_id, giorno_id, negozio_id, in_uso) values(orarioId, giornoId, negozioId, 1);
+		end if;
+		fetch c into righe, orarioId, giornoId, negozioId;
+	end while;
+END;
+//
+delimiter ;
+
+drop procedure if exists controlloDuplicatiTurni;
+delimiter //
+CREATE PROCEDURE controlloDuplicatiTurni()
+BEGIN
+	declare giornoId int;
+    declare negozioId int;
+	declare inUso int;
+	declare inizioT time;
+	declare fineT time;
+	declare righe int;
+	declare righeDaEliminare int;
+	declare finito int default 0;
+    declare c cursor for select count(1), negozio_id, giorno_id, inizio, fine from orario_turno group by negozio_id, giorno_id, inizio, fine;
+	declare continue handler for sqlstate '02000' set finito = 1;
+	open c;
+	fetch c into righe, negozioId, giornoId, inizioT, fineT;
+	while not finito do
+		if righe > 1 then
+		set righeDaEliminare = righe - 1;
+		delete from orario_turno where inizio = inizioT and fine = fineT and giorno_id = giornoId and negozio_id = negozioId;
+        insert into orario_turno(inizio, fine, giorno_id, negozio_id, in_uso) values(inizioT, fineT, giornoId, negozioId, 1);
+		end if;
+		fetch c into righe, orarioId, giornoId, negozioId;
+	end while;
+END;
+//
+delimiter ;
