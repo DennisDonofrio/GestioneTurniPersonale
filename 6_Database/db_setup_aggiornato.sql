@@ -115,3 +115,29 @@ CREATE TABLE turno_lavoro(
     ON UPDATE NO ACTION ON DELETE NO ACTION,
     PRIMARY KEY (dipendente_id, negozio_id, orario_turno_inizio, orario_turno_fine, data)
 );
+
+DROP PROCEDURE IF EXISTS controlloDuplicati;
+delimiter //
+CREATE PROCEDURE controlloDuplicati()
+BEGIN
+	declare orarioId int;
+	declare giornoId int;
+    	declare negozioId int;
+	declare inUso int;
+	declare righe int;
+	declare righeDaEliminare int;
+	declare finito int default 0;
+    	declare c cursor for select count(1), orario_id, giorno_id, negozio_id from usa group by orario_id, giorno_id, negozio_id;
+	declare continue handler for sqlstate '02000' set finito = 1;
+	open c;
+	fetch c into righe, orarioId, giornoId, negozioId;
+	while not finito do
+		if righe > 1 then
+		set righeDaEliminare = righe - 1;
+		delete from usa where orario_id = orarioId and giorno_id = giornoId and negozio_id = negozioId and in_uso = 0;
+		end if;
+		fetch c into righe, orarioId, giornoId, negozioId;
+	end while;
+END;
+//
+delimiter ;
