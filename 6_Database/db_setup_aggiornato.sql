@@ -9,8 +9,7 @@ CREATE TABLE amministratore(
     cognome VARCHAR(50),
     email VARCHAR(50),
     hash_password VARCHAR(80),
-    indirizzo VARCHAR(50),
-    archiviato TINYINT(1)
+    indirizzo VARCHAR(50)
 );
 
 DROP TABLE IF EXISTS datore;
