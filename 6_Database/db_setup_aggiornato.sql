@@ -73,6 +73,7 @@ CREATE TABLE negozio(
 
 DROP TABLE IF EXISTS orario_turno;
 CREATE TABLE orario_turno(
+    id INT PIRMARY KEY AUTO_INCREMENT,
     inizio TIME,
     fine TIME,
 	negozio_id INT,
@@ -80,8 +81,7 @@ CREATE TABLE orario_turno(
 	FOREIGN KEY (giorno_id) REFERENCES giorno(id)
     ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (negozio_id) REFERENCES negozio(id)
-    ON UPDATE CASCADE ON DELETE CASCADE,
-    PRIMARY KEY (inizio, fine, negozio_id, giorno_id)
+    ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS usa;
