@@ -143,31 +143,3 @@ BEGIN
 END;
 //
 delimiter ;
-
-drop procedure if exists controlloDuplicatiTurni;
-delimiter //
-CREATE PROCEDURE controlloDuplicatiTurni()
-BEGIN
-	declare giornoId int;
-    declare negozioId int;
-	declare inUso int;
-	declare inizioT time;
-	declare fineT time;
-	declare righe int;
-	declare righeDaEliminare int;
-	declare finito int default 0;
-    declare c cursor for select count(1), negozio_id, giorno_id, inizio, fine from orario_turno group by negozio_id, giorno_id, inizio, fine;
-	declare continue handler for sqlstate '02000' set finito = 1;
-	open c;
-	fetch c into righe, negozioId, giornoId, inizioT, fineT;
-	while not finito do
-		if righe > 1 then
-		set righeDaEliminare = righe - 1;
-		delete from orario_turno where inizio = inizioT and fine = fineT and giorno_id = giornoId and negozio_id = negozioId;
-        insert into orario_turno(inizio, fine, giorno_id, negozio_id, in_uso) values(inizioT, fineT, giornoId, negozioId, 1);
-		end if;
-		fetch c into righe, orarioId, giornoId, negozioId;
-	end while;
-END;
-//
-delimiter ;
