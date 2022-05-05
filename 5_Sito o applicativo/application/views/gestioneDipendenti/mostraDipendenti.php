@@ -21,5 +21,5 @@
         </tbody>
     </table>
 <?php else: ?>
-    <h3>Nessun dipendente disponibile</h3>
+    <h3 style="text-align: center; padding:25px;">Nessun dipendente disponibile</h3>
 <?php endif ?>

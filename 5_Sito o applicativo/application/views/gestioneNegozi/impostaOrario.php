@@ -1,5 +1,6 @@
+<h1 style="text-align: center; padding:25px;">Imposta orario</h1>
 <form method="post" action="<?php echo URL; ?>negozio/salvaOrario">
-    <table>
+    <table style="margin: auto; margin-right:auto; margin-top:3em;">
         <tr>
             <td>
                 <a style="margin-left: 20px;font-size:20px;">Lunedì</a>
@@ -84,9 +85,17 @@
                 <i class="bi bi-dash" style="font-size: 25px;cursor: pointer" id="domenicaMin"></i>
             </td>
         </tr>
+        <tr>
+            <td colspan="6" style="text-align: center;">
+        <input type="submit" value="Salva">
+            </td>
+        </tr>
     </table>
-    <input type="submit">
 </form>
+
+<?php if(isset($data['error'])) : ?>
+	<h2 id="errorModifyComponent" style="text-align: center" class="alert alert-danger"> <?php echo $data['error'] ?></h2>
+<?php endif; ?>
 
 <div style="display: none;" id="orari">
     <?php echo $data['orari']; ?>
@@ -291,7 +300,7 @@
                     aggiungiInput(json[i]['inizio'], json[i]['fine'], sabato, sabatoDiv, giorni.sabato)
                     break
                 case "Domenica":
-                    aggiungiInputDomenica(json[i]['inizio'], json[i]['fine']);
+                    aggiungiInput(json[i]['inizio'], json[i]['fine'], domenica, domenicaDiv, giorni.domenica);
                     break
             }
         }

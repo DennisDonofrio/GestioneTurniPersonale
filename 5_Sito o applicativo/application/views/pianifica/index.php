@@ -1,5 +1,6 @@
 <h1 style="text-align: center;">Pianifica orario automaticamente</h1>
 <form action="<?php echo URL; ?>pianifica/pianificaOrario" method="POST">
+    <?php if(!empty($data['negozi'])) : ?>  
     <table style="margin: auto; margin-right:auto; margin-top:3em;">
         <tr>
             <td>
@@ -35,5 +36,12 @@
             </td>
         </tr>
     </table>
-    
+    <?php else : ?>
+        <br>
+        <h3 style="text-align: center;">Nessun negozio disponibile</h3>
+    <?php endif; ?>
 </form>
+
+<?php if(isset($data['errore'])) : ?>
+	<h2 id="errorLogin" style="text-align: center" class="alert alert-danger"> <?php echo $data['errore'] ?></h2>
+<?php endif; ?>

@@ -20,5 +20,5 @@
         </tbody>
     </table>
 <?php }else{ ?>
-    <h3>Nessun negozio disponibile</h3>
+    <h3 style="text-align: center;">Nessun negozio disponibile</h3>
 <?php } ?>

@@ -16,7 +16,7 @@
     </tr>
     </tr>
         <td colspan=2>
-            <input type="button" class="btn btn-dark btn-lg" style="height: 5em; width: 24em" onclick="window.location.href='<?php echo URL; ?>dipendente/statistiche'" value="Mostra statistiche">
+            <input type="button" class="btn btn-dark btn-lg" style="height: 5em; width: 24em" onclick="window.location.href='<?php echo URL; ?>statistiche'" value="Mostra statistiche">
         </td>
     </tr>
 </table>

@@ -2,8 +2,14 @@
 	<form action="<?php echo URL ?>negozio/eliminaNegozio" method="POST">
 		<table>
 			<thead>
+				<tr>
+					<td colspan="2"><h1>Rimuovi negozio</h1></td>
+				</tr>
+			</thead>
+			<tbody>
+			<?php if(!empty($data['negozi'])) : ?>
                 <tr>
-					<td>
+					<td style="text-align: right;">
 						<label>Negozio:</label>
 					</td>
 					<td>
@@ -20,6 +26,9 @@
 						<input type="submit" class="btn btn-dark" value="Rimuovi">
 					</td>
 				</tr>
+			<?php else : ?>
+				<tr><td><h3>Nessun negozio disponibile</h3></td></tr>
+			<?php endif; ?>
 			</tbody>
 		</table>
 	</form>

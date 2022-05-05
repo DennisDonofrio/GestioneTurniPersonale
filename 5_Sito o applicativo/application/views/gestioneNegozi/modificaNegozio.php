@@ -6,6 +6,7 @@
                     <h1>Modifica negozio</h1>
 				</tr>
 			</thead>
+			<?php if(!empty($data['negozi'])) : ?>
 			<tbody>
                 <tr>
 					<td>
@@ -59,6 +60,10 @@
 					</td>
 				</tr>
 			</tbody>
+			<?php else : ?>
+				<br>
+				<h3>Nessun negozio disponibile</h3>
+			<?php endif; ?>
 		</table>
 	</form>
 </div>

@@ -7,6 +7,7 @@
             </tr>
         </thead>
         <tbody>
+        <?php if(!empty($data['negozi'])) : ?>
             <tr>
                 <td>Negozio</td>
                 <td>
@@ -38,11 +39,14 @@
             <tr>
                 <td colspan="2" style="text-align:center">
                 <br>
-                    <input type="submit" class="btn btn-dark" name="aggiungi" value="Aggiungi orario">
+                    <input type="submit" class="btn btn-dark" name="aggiungi" value="Aggiungi turno">
                 </td>
             </tr>
+            <?php else : ?>
+				<tr><td><h3>Nessun negozio disponibile</h3></td></tr>
+			<?php endif; ?>
         </tbody>
     </table>
 </form>
 </div>
-<h2 style="text-align: center"<?php echo (isset($this->error) ? 'class="alert alert-danger">' . $this->error: ">" ); ?>></h2>
+<h2 style="text-align: center"<?php echo (isset($this->error) ? 'class="alert alert-danger">' . $this->error: ">" ); ?></h2>

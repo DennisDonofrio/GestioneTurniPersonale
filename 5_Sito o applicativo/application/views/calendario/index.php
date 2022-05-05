@@ -53,14 +53,6 @@
                         alert('there was an error while fetching events!');
                     }
                 }
-            ],
-
-            events: [
-                {
-                    id: 2,
-                    title: 'a',
-                    start: '2022-03-10'
-                }
             ]
             
         });
@@ -149,14 +141,17 @@
     <strong>Dipendenti</strong>
   </p>
 
-  <?php foreach($data['dipendenti'] as $dipendente): ?>
+    <?php if(!empty($data['dipendenti'])) : ?>
+    <?php foreach($data['dipendenti'] as $dipendente): ?>
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
         <div class='fc-event-main'>
             <?php echo "(" . $dipendente['id'] . ") " .  $dipendente['nome']; ?>
         </div>
     </div>
-  <?php endforeach; ?>
-  
+    <?php endforeach; ?>
+    <?php else : ?>
+        <p>Non ci sono dipendenti</p>
+    <?php endif; ?>
 </div>
 
 <div id='calendar-container'>

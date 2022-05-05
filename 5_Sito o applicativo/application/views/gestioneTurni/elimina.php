@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-center pt-4 pb-4">
 <form method="POST" action="<?php echo URL; ?>gestioneTurni/elimina">
-    <table>
+    <table style="margin: auto; margin-right:auto; margin-top:3em;">
         <thead>
             <tr>
                 <h1>Elimina Turno</h1>
@@ -20,11 +20,11 @@
             <tr>
                 <td colspan="2" style="text-align:center">
                     <br>
-                    <input type="submit" class="btn btn-dark" name="modifica" value="Elimina turno">
+                    <input type="submit" class="btn btn-dark" name="elimina" value="Elimina turno">
                 </td>
             </tr>
         </tbody>
     </table>
 </form>
 </div>
-<h2 style="text-align: center"<?php echo (isset($this->error) ? 'class="alert alert-danger">' . $this->error: ">" ); ?>></h2>
+<h2 style="text-align: center"<?php echo (isset($data['error']) ? 'class="alert alert-danger">' . $data['error']: ">" ); ?></h2>
